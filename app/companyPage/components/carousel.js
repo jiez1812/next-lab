@@ -9,6 +9,7 @@ function CarouselImage({imagefile, description, num}){
                 alt={description}
                 width={1920}
                 height={800}
+                priority={true}
                 className='carousel-item w-full'/>
         </div>
     );
