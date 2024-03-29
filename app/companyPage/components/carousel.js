@@ -19,7 +19,7 @@ export default function Carousel({images}) {
         <>
             <div className="carousel w-full">
                 {images.map((image, index) => (
-                    <CarouselImage key={index} imagefile={image.imageFile} description={image.description} index={index+1} />
+                    <CarouselImage key={index} imagefile={image.imageFile} description={image.description} num={index+1} />
                 ))}
             </div>
             <div className='flex justify-center w-full py-2 gap-2'>
