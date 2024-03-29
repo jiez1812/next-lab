@@ -10,6 +10,7 @@ function CarouselImage({imagefile, description, num}){
                 width={1920}
                 height={800}
                 priority={true}
+                placeholder='blur'
                 className='carousel-item w-full'/>
         </div>
     );
