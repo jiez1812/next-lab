@@ -1,4 +1,19 @@
 import Image from 'next/image';
+import fs from "node:fs/promises";
+import { getPlaiceholder } from "plaiceholder";
+
+async function getBlurImage(imagePath){
+        try {
+                const file = await fs.readFile(imagePath);
+             
+                const { base64 } = await getPlaiceholder(file);
+             
+                return base64;
+            } catch (err) {
+                err;
+            }
+}
+
 
 function CarouselImage({imagefile, description, num}){
     const imagePath = `/carousel/${imagefile}`;
@@ -11,6 +26,7 @@ function CarouselImage({imagefile, description, num}){
                 height={800}
                 priority={true}
                 placeholder='blur'
+                blurDataURL={String(getBlurImage(imagePath))}
                 className='carousel-item w-full'/>
         </div>
     );
