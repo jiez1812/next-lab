@@ -3,6 +3,7 @@ import Carousel from "./components/carousel";
 
 export default function CompanyPage() {
     const brandName = '🍄 Mushroom Mushroom 🍄'
+    const brandLogo = '🍄'
     const navigationItems = [
       {name: 'News', link:'#'},
       {name: 'Products', link:'#'},
@@ -16,7 +17,7 @@ export default function CompanyPage() {
     ]
   return(
     <>
-        <Navbar brandName={brandName} navigationItems={navigationItems} />
+        <Navbar brandName={brandName} brandLogo={brandLogo} navigationItems={navigationItems} />
         <Carousel images={images} />
     </>
   );
