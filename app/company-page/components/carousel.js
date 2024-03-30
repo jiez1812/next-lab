@@ -14,11 +14,22 @@ async function getBlurImage(imagePath){
             }
 }
 
+function NextPrev({num, length}){
+    let prevNum = num === 1 ? length : num - 1;
+    let nextNum = num === length ? 1 : num + 1;
+    return(
+        <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href={`#carousel-${prevNum}`} className="btn btn-circle opacity-50 hover:opacity-100">❮</a>
+            <a href={`#carousel-${nextNum}`} className="btn btn-circle opacity-50 hover:opacity-100">❯</a>
+        </div>
+    )
+}
+
 
 function CarouselImage({imagefile, description, num}){
     const imagePath = `/carousel/${imagefile}`;
     return(
-        <div id={`carousel-${num}`} className='carousel-item w-full'>
+        <div id={`carousel-${num}`} className='carousel-item relative w-full'>
             <Image
                 src={imagePath}
                 alt={description}
@@ -27,7 +38,8 @@ function CarouselImage({imagefile, description, num}){
                 priority={true}
                 placeholder='blur'
                 blurDataURL={String(getBlurImage(imagePath))}
-                className='carousel-item w-full'/>
+                className='w-full'/>
+            <NextPrev num={num} length={3}/>
         </div>
     );
 }
@@ -36,16 +48,16 @@ export default function Carousel({images}) {
     return(
         <>
             <div className="carousel w-full">
-                {images.map((image, index) => (
-                    <CarouselImage key={index} imagefile={image.imageFile} description={image.description} num={index+1} />
-                ))}
-            </div>
-            <div className='flex justify-center w-full py-2 gap-2'>
-                {
-                    images.map((_, index) => (
-                        <a key={index} href={`#carousel-${index+1}`} className="btn btn-xs">{`${index+1}`}</a>
-                    ))
-                }
+                {images.map((image, index) => {
+                    return (
+                        <CarouselImage
+                            key={index}
+                            imagefile={image.imageFile}
+                            description={image.description}
+                            num={index+1}
+                        />
+                    );
+                })}
             </div>
         </>
     );
