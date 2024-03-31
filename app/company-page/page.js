@@ -5,9 +5,9 @@ import Tabs from "./components/tabs";
 export default function CompanyPage() {
     const brandName = '🍄 Mushroom Mushroom 🍄'
     const navigationItems = [
-      {name: 'About us', link:'#'},
-      {name: 'Products', link:'#'},
       {name: 'Mission', link:'#'},
+      {name: 'Products', link:'#'},
+      {name: 'About us', link:'#'},
       {name: 'Contact', link:'#'},
     ]
     const images =[

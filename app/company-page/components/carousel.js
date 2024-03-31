@@ -29,7 +29,7 @@ function CarouselText({title, description}){
     return(
         <div className='absolute rounded-md space-y-4 top-2/3 p-4 m-4 flex-col lg:top-1/4 lg:w-4/12 lg:left-32 lg:m-0 backdrop-grayscale-0 bg-black/30'>
             <h1 className='text-5xl font-semibold text-gray-50'>{title}</h1>
-            <p className='text-gray-100'>{description}</p>
+            <p className='text-lg text-gray-100'>{description}</p>
         </div>
     );
 }
