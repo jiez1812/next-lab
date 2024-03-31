@@ -1,5 +1,6 @@
 import Navbar from "./components/navbar";
 import Carousel from "./components/carousel";
+import Tabs from "./components/tabs";
 
 export default function CompanyPage() {
     const brandName = '🍄 Mushroom Mushroom 🍄'
@@ -33,6 +34,7 @@ export default function CompanyPage() {
     <>
         <Navbar brandName={brandName} navigationItems={navigationItems} />
         <Carousel images={images} />
+        <Tabs items={navigationItems} />
     </>
   );
 }

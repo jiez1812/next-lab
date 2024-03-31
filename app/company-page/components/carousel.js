@@ -18,7 +18,7 @@ function NextPrev({num, length}){
     let prevNum = num === 1 ? length : num - 1;
     let nextNum = num === length ? 1 : num + 1;
     return(
-        <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/3">
+        <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
             <a href={`#carousel-${prevNum}`} className="btn btn-circle hidden md:opacity-50 md:flex hover:opacity-100">❮</a>
             <a href={`#carousel-${nextNum}`} className="btn btn-circle hidden md:opacity-50 md:flex hover:opacity-100">❯</a>
         </div>
@@ -47,9 +47,9 @@ function CarouselImage({imagefile, description, num, imageNum, carouselTitle, ca
                     objectFit: 'cover',
                 }}
                 blurDataURL={String(getBlurImage(imagePath))}
-                width={1000}
-                height={1}
-                className='h-screen lg:w-full lg:h-4/6'/>
+                width={200}
+                height={200}
+                className='w-full h-dvh'/>
             <CarouselText title={carouselTitle} description={carouselDescription}/>
             <NextPrev num={num} length={imageNum}/>
         </div>
@@ -59,7 +59,7 @@ function CarouselImage({imagefile, description, num, imageNum, carouselTitle, ca
 export default function Carousel({images}) {
     return(
         <>
-            <div className="carousel w-full">
+            <div className="carousel w-full h-screen">
                 {images.map((image, index) => {
                     return (
                         <CarouselImage
