@@ -31,10 +31,10 @@ export default function CompanyPage() {
       },
     ]
   return(
-    <>
+    <div>
         <Navbar brandName={brandName} navigationItems={navigationItems} />
         <Carousel images={images} />
         <Tabs items={navigationItems} />
-    </>
+    </div>
   );
 }
