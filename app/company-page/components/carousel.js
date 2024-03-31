@@ -27,7 +27,7 @@ function NextPrev({num, length}){
 
 function CarouselText({title, description}){
     return(
-        <div className='absolute rounded-md space-y-4 top-2/3 p-4 m-4 flex-col lg:top-1/4 lg:w-4/12 lg:left-32 lg:m-0 backdrop-grayscale-0 bg-black/30'>
+        <div className='absolute rounded-md space-y-4 top-1/2 p-4 m-4 flex-col lg:top-1/4 lg:w-4/12 lg:left-32 lg:m-0 backdrop-grayscale-0 bg-black/30'>
             <h1 className='text-5xl font-semibold text-gray-50'>{title}</h1>
             <p className='text-lg text-gray-100'>{description}</p>
         </div>
@@ -49,7 +49,7 @@ function CarouselImage({imagefile, description, num, imageNum, carouselTitle, ca
                 blurDataURL={String(getBlurImage(imagePath))}
                 width={200}
                 height={200}
-                className='w-full h-svh'/>
+                className='w-full'/>
             <CarouselText title={carouselTitle} description={carouselDescription}/>
             <NextPrev num={num} length={imageNum}/>
         </div>
@@ -59,7 +59,7 @@ function CarouselImage({imagefile, description, num, imageNum, carouselTitle, ca
 export default function Carousel({images}) {
     return(
         <>
-            <div className="carousel w-full h-screen">
+            <div className="carousel w-full h-svh">
                 {images.map((image, index) => {
                     return (
                         <CarouselImage

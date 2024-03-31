@@ -5,10 +5,12 @@
  * @returns {JSX.Element} - rendered Navbar
  */
 
+import Link from 'next/link';
+
 export default function Navbar({brandName, navigationItems = []}){
     return(
         <>
-            <div className="navbar bg-base-100 abosolute">
+            <div className="navbar bg-base-100 sticky top-0 z-50 lg:static lg:z-0">
                 <div className="navbar-start">
                     <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -17,12 +19,12 @@ export default function Navbar({brandName, navigationItems = []}){
                         <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                             {navigationItems.map((item, index)=>(
                                 <li key={index}>
-                                    <a href={`${item.link}`}>{item.name}</a>
+                                    <Link href={`${item.link}`}>{item.name}</Link>
                                 </li>
                             ))}
                         </ul>
                     </div>
-                    <a className="btn btn-ghost text-xl block">{brandName}</a>
+                    <Link className="btn btn-ghost text-xl" href="/company-page">{brandName}</Link>
                 </div>
                 <div className="navbar-end hidden lg:flex">
                     <ul className="menu menu-horizontal px-1 gap-4">

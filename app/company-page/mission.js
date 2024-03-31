@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Mission({content}){
     return(
-        <div className="container mx-auto h-2/5">
+        <div className="container mx-auto lg:h-2/5">
             <h2 id="mission">{content.title}</h2>
             <p>{content.description}</p>
             <Image 
