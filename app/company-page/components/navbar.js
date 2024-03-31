@@ -5,7 +5,7 @@
  * @returns {JSX.Element} - rendered Navbar
  */
 
-export default function Navbar({brandName, brandLogo, navigationItems = []}){
+export default function Navbar({brandName, navigationItems = []}){
     return(
         <>
             <div className="navbar bg-base-100">
@@ -22,11 +22,10 @@ export default function Navbar({brandName, brandLogo, navigationItems = []}){
                             ))}
                         </ul>
                     </div>
-                    <a className="btn btn-ghost text-xl md:hidden">{brandLogo}</a>
-                    <a className="btn btn-ghost text-xl hidden md:block">{brandName}</a>
+                    <a className="btn btn-ghost text-xl block">{brandName}</a>
                 </div>
                 <div className="navbar-end hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
+                    <ul className="menu menu-horizontal px-1 gap-4">
                         {navigationItems.map((item, index)=>(
                             <li key={index}>
                                 <a href={`${item.link}`}>{item.name}</a>
