@@ -49,7 +49,7 @@ function CarouselImage({imagefile, description, num, imageNum, carouselTitle, ca
                 blurDataURL={String(getBlurImage(imagePath))}
                 width={200}
                 height={200}
-                className='w-full h-dvh'/>
+                className='w-full h-svh'/>
             <CarouselText title={carouselTitle} description={carouselDescription}/>
             <NextPrev num={num} length={imageNum}/>
         </div>
