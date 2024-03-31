@@ -25,8 +25,16 @@ function NextPrev({num, length}){
     )
 }
 
+function CarouselText({title, description}){
+    return(
+        <div className='absolute rounded-md space-y-4 top-2/3 p-4 m-4 flex-col lg:top-1/4 lg:w-4/12 lg:left-32 lg:m-0 backdrop-grayscale-0 bg-black/30'>
+            <h1 className='text-5xl font-semibold text-gray-50'>{title}</h1>
+            <p className='text-gray-100'>{description}</p>
+        </div>
+    );
+}
 
-function CarouselImage({imagefile, description, num}){
+function CarouselImage({imagefile, description, num, imageNum, carouselTitle, carouselDescription}){
     const imagePath = `/carousel/${imagefile}`;
     return(
         <div id={`carousel-${num}`} className='carousel-item relative w-full'>
@@ -42,7 +50,8 @@ function CarouselImage({imagefile, description, num}){
                 width={1000}
                 height={1}
                 className='h-screen lg:w-full lg:h-4/6'/>
-            <NextPrev num={num} length={3}/>
+            <CarouselText title={carouselTitle} description={carouselDescription}/>
+            <NextPrev num={num} length={imageNum}/>
         </div>
     );
 }
@@ -58,6 +67,9 @@ export default function Carousel({images}) {
                             imagefile={image.imageFile}
                             description={image.description}
                             num={index+1}
+                            imageNum={images.length}
+                            carouselTitle={image.carouselTitle}
+                            carouselDescription={image.carouselDescription}
                         />
                     );
                 })}
