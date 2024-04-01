@@ -100,7 +100,9 @@ export default function CompanyPage() {
       <Navbar brandName={brandName} navigationItems={navigationItems} />
       <Carousel images={images} />
       <Tabs items={navigationItems} />
-      <Mission content={missions} />
+      <div className='neutral-content'>
+        <Mission content={missions} />
+      </div>
     </>
   );
 }
