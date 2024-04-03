@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Mission({content}){
     return(
-        <div id="mission" className="container lg:columns-2 mx-auto lg:h-2/5 py-4 lg:px-4">
+        <div id="mission" className="container lg:columns-2 mx-auto lg:h-2/5 py-4 lg:px-4 scroll-mt-14">
             <div className='m-4'>
             <h2 className="text-4xl font-bold mb-4 underline underline-offset-8 decoration-8 decoration-accent">{content.title}</h2>
             <p className='font-medium leading-relaxed text-justify lg:ms-4'>{content.description}</p>
