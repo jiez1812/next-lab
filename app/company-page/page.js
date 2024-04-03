@@ -103,6 +103,7 @@ export default function CompanyPage() {
       <div className='neutral-content'>
         <Mission content={missions} />
       </div>
+      <hr className='shadow-sm'/>
       <Products products={products} />
     </>
   );
