@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const greetings = {
   morning: 'Good Morning',
@@ -16,11 +16,10 @@ const backgroundColors = {
 
 export default function Home() {
   const [text, setText] = useState('');
-  const [currentGreeting, setCurrentGreeting] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('');
+  const typingInterval = useRef(null); 
 
   useEffect(() => {
-    let typingInterval;
     let isHelloWorldTyped = false;
 
     const updateTime = () => {
@@ -35,7 +34,6 @@ export default function Home() {
         greetingKey = 'night';
       }
 
-      setCurrentGreeting(greetings[greetingKey]);
       setBackgroundColor(backgroundColors[greetingKey]);
 
       const fullText = isHelloWorldTyped
@@ -43,13 +41,15 @@ export default function Home() {
         : `Hello World ${greetings[greetingKey]}`;
       let i = 0;
 
-      clearInterval(typingInterval);
+      if (typingInterval.current) {
+        clearInterval(typingInterval.current); 
+      }
 
-      typingInterval = setInterval(() => {
+      typingInterval.current = setInterval(() => {
         setText(fullText.slice(0, i + 1));
         i++;
         if (i > fullText.length) {
-          clearInterval(typingInterval);
+          clearInterval(typingInterval.current);
           isHelloWorldTyped = true; 
           setTimeout(updateTime, 2000); 
         }
@@ -58,7 +58,11 @@ export default function Home() {
 
     updateTime(); 
 
-    return () => clearInterval(typingInterval); 
+    return () => {
+      if (typingInterval.current) {
+        clearInterval(typingInterval.current); 
+      }
+    };
   }, []);
 
   return (
