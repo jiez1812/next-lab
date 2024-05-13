@@ -40,7 +40,7 @@ export default function Home() {
 
       const fullText = isHelloWorldTyped
         ? greetings[greetingKey]
-        : `Hello World ${greetings[greetingKey]}`;
+        : `Hello World`;
       let i = 0;
 
       if (typingInterval.current) {
