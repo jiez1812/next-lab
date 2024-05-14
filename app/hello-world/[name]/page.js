@@ -36,16 +36,16 @@ export default function Home({params}) {
     const updateTime = () => {
       const hour = new Date().getHours();
       let greetingKey = 'morning';
-
-      if (hour >= 12 && hour < 17) {
+      
+      if (hour >= 0 && hour < 6) {
+        greetingKey = 'midnight';
+      } else if (hour >= 12 && hour < 17) {
         greetingKey = 'afternoon';
       } else if (hour >= 17 && hour < 22) {
         greetingKey = 'evening';
-      } else if (hour >= 22 && hour < 0) {
+      } else if (hour >= 22 && hour < 24) {
         greetingKey = 'night';
-      } else if (hour >= 0 || hour < 6) {
-        greetingKey = 'midnight';
-      }
+      } 
 
       setBackgroundColor(backgroundColors[greetingKey]);
 
