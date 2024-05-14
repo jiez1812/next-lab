@@ -43,7 +43,7 @@ export default function Home({params}) {
         greetingKey = 'evening';
       } else if (hour >= 22 && hour < 0) {
         greetingKey = 'night';
-      } else if (hour >= 20 || hour < 6) {
+      } else if (hour >= 0 || hour < 6) {
         greetingKey = 'midnight';
       }
 
