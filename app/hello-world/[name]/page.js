@@ -1,7 +1,6 @@
-// page.js
-
 'use client'
 
+import '../styles/hello-world.module.css'
 import { useState, useEffect, useRef } from 'react';
 
 // 定义不同时间段的问候语
@@ -15,14 +14,15 @@ const greetings = {
 
 // 定义不同时间段的背景颜色
 const backgroundColors = {
-  morning: 'from-yellow-400 to-orange-500',
-  afternoon: 'from-blue-400 to-green-500',
-  evening: 'from-purple-500 to-blue-600',
-  night: 'from-blue-800 to-gray-600',
-  midnight: 'from-gray-800 to-black',
+  morning: 'bg-gradient-to-r from-yellow-100 via-orange-200 to-pink-300',
+  afternoon: 'bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500',
+  evening: 'bg-gradient-to-r from-rose-400 via-fuchsia-500 to-purple-600',
+  night: 'bg-gradient-to-r from-indigo-700 via-blue-800 to-gray-900',
+  midnight: 'bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900',
 };
+export default function Home({params}) {
+  const name = decodeURIComponent(params.name); // 获取动态路由参数
 
-export default function Home() {
   // text 状态存储当前显示的文本
   const [text, setText] = useState('');
   // backgroundColor 状态存储当前的背景颜色
@@ -49,7 +49,15 @@ export default function Home() {
 
       setBackgroundColor(backgroundColors[greetingKey]);
 
-      const fullText = showGreeting ? greetings[greetingKey] : 'Hello World';
+      // 将每个单词的首字母大写
+      const capitalizedName = name
+        ? name
+            .split(' ')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+        : 'World';
+
+      const fullText = showGreeting ? greetings[greetingKey] : `Hi ${capitalizedName}`;
       let i = 0;
 
       if (typingInterval.current) {
@@ -73,10 +81,10 @@ export default function Home() {
         clearInterval(typingInterval.current);
       }
     };
-  }, [showGreeting]);
+  }, [showGreeting, name]);
 
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen bg-gradient-to-r ${backgroundColor}`}>
+    <div className={`flex flex-col items-center justify-center min-h-screen ${backgroundColor} glassmorphism`}>
       <h1 className="text-5xl font-bold text-white text-shadow-lg">
         {text}
       </h1>
