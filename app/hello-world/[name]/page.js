@@ -64,14 +64,23 @@ export default function Home({params}) {
         clearInterval(typingInterval.current);
       }
 
-      typingInterval.current = setInterval(() => {
-        setText(fullText.slice(0, i + 1));
-        i++;
-        if (i > fullText.length) {
-          clearInterval(typingInterval.current);
-          setShowGreeting(prev => !prev);
-        }
-      }, 200);
+      // 定义一个函数来处理打字机效果和延迟
+      const typeText = () => {
+        typingInterval.current = setInterval(() => {
+          setText(fullText.slice(0, i + 1));
+          i++;
+          if (i > fullText.length) {
+            clearInterval(typingInterval.current);
+            // 延迟1秒后切换文本
+            setTimeout(() => {
+              setShowGreeting(prev => !prev);
+            }, 1000); 
+          }
+        }, 200);
+      }
+
+      // 立即开始打字
+      typeText();
     };
 
     updateTime();
@@ -85,7 +94,7 @@ export default function Home({params}) {
 
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen ${backgroundColor} glassmorphism`}>
-      <h1 className="text-5xl font-bold text-white text-shadow-lg">
+      <h1 className="text-5xl font-bold text-white text-shadow-lg mx-3 text-center lg:mx-0">
         {text}
       </h1>
     </div>
