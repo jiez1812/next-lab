@@ -9,7 +9,7 @@ const greetings = {
   afternoon: 'Good Afternoon',
   evening: 'Good Evening',
   night: "Have a nice dream :)",
-  midnight: "Why don't you sleep?!",
+  midnight: "やれやれ...Why don't you sleep? 🤵‍♂️🤵‍♂️",
 };
 
 // 定义不同时间段的背景颜色
