@@ -35,7 +35,9 @@ export default function Home() {
     setIsLoading(true);
     try {
       if (inputText !== "") {
-        const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GOOGLE_API);
+        const genAI = new GoogleGenerativeAI(
+          process.env.NEXT_PUBLIC_GOOGLE_API
+        );
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `Please use ${targetLanguage} to translate the following text into ${targetLanguage}, ensuring accuracy and explaining any technical terms: ${inputText}`;
@@ -111,25 +113,25 @@ export default function Home() {
           )}
         </div>
 
-        <select
-          value={targetLanguage}
-          onChange={(e) => setTargetLanguage(e.target.value)}
-          className="select select-bordered w-full max-w-xs"
-        >
-          {languageOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <div className="flex flex-col sm:flex-row gap-2 items-center">
+          <select
+            value={targetLanguage}
+            onChange={(e) => setTargetLanguage(e.target.value)}
+            className="select select-bordered w-full sm:w-auto flex-grow"
+          >
+            {languageOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
 
-        <div className="flex flex-wrap gap-2">
           {isLoading ? (
             <span className="loading loading-spinner loading-md"></span>
           ) : (
             <button
               onClick={handleTranslate}
-              className="btn btn-primary"
+              className="btn btn-primary w-full sm:w-auto"
               disabled={!inputText.trim()}
             >
               Translate
@@ -138,9 +140,18 @@ export default function Home() {
         </div>
 
         {translatedText && (
-          <div className="mt-4 card bg-base-100 shadow-xl">
+          <div className="mt-4 card bg-base-100 shadow-xl w-full">
             <div className="card-body">
-              <ReactMarkdown className="prose">{translatedText}</ReactMarkdown>
+              <ReactMarkdown
+                className="prose max-w-none"
+                components={{
+                  p: ({ node, ...props }) => (
+                    <p className="whitespace-pre-wrap" {...props} />
+                  ),
+                }}
+              >
+                {translatedText}
+              </ReactMarkdown>
             </div>
           </div>
         )}
