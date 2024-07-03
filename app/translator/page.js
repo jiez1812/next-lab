@@ -113,11 +113,11 @@ export default function Home() {
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 items-center">
+        <div className="flex flex-col sm:flex-row gap-2 items-center justify-between">
           <select
             value={targetLanguage}
             onChange={(e) => setTargetLanguage(e.target.value)}
-            className="select select-bordered w-full sm:w-auto flex-grow"
+            className="select select-bordered w-full sm:w-64 md:w-80"
           >
             {languageOptions.map((option) => (
               <option key={option.value} value={option.value}>
