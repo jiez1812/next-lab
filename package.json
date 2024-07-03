@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.2.2",
+    "@google/generative-ai": "^0.14.1",
     "@plaiceholder/next": "^3.0.0",
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.5.1",
@@ -17,6 +18,7 @@
     "plaiceholder": "^3.0.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-markdown": "^9.0.1",
     "sharp": "^0.33.3",
     "styled-components": "^6.1.11"
   },
