@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "NextJS Lab",
   description: "Lab for anything learning NextJS",
-  visualViewport: "width=device-width, initial-scale=1",
+  visualViewport: "width=device-width, initial-scale=1, maximum-scale=1",
 };
 
 export default function RootLayout({ children }) {

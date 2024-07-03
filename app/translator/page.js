@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import ReactMarkdown from "react-markdown"; 
+import ReactMarkdown from "react-markdown";
 
 export default function Home() {
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState(null);
-  const [targetLanguage, setTargetLanguage] = useState("en"); 
+  const [targetLanguage, setTargetLanguage] = useState("en");
   const inputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,7 +32,7 @@ export default function Home() {
   };
 
   const handleTranslate = async () => {
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
       const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -47,54 +47,67 @@ export default function Home() {
     } catch (error) {
       console.error("Error during translation:", error);
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const resizeInput = () => {
       if (inputRef.current) {
-        // Desktop: Max height 50%
-        inputRef.current.style.height = "auto";
-        inputRef.current.style.height = `min(${inputRef.current.scrollHeight}px, 50vh)`;
-
-        // Mobile: Max height 100%
-        inputRef.current.style.height = `min(${inputRef.current.scrollHeight}px, 100vh)`;
+        const isMobile = window.innerWidth <= 768;
+        
+        // Force reflow
+        inputRef.current.style.height = 'auto';
+        
+        const scrollHeight = inputRef.current.scrollHeight;
+        
+        const maxHeight = isMobile ? '100vh' : '50vh';
+        inputRef.current.style.height = `min(${scrollHeight}px, ${maxHeight})`;
       }
     };
 
-    resizeInput(); 
+    resizeInput();
 
     const inputResizeObserver = new ResizeObserver(resizeInput);
-    inputResizeObserver.observe(inputRef.current);
+    if (inputRef.current) {
+      inputResizeObserver.observe(inputRef.current);
+    }
+
+    window.addEventListener('resize', resizeInput);
 
     return () => {
+      if (inputRef.current) {
+        inputResizeObserver.unobserve(inputRef.current);
+      }
       inputResizeObserver.disconnect();
+      window.removeEventListener('resize', resizeInput);
     };
-  }, []);
+  }, [inputText]); // Added inputText as a dependency to trigger resize on content change
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full max-w-4xl mx-auto p-4">
       <h1 className="text-3xl font-bold text-center mb-4">
         LLM (Large Language Model) Translator
       </h1>
 
       <div className="flex flex-col gap-4">
         <textarea
-          ref={inputRef} 
+          ref={inputRef}
           value={inputText}
           onChange={handleInputChange}
           placeholder="Enter text to translate..."
-          className="resize-none w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          style={{ resize: 'none', maxHeight: '100vh' }}
         />
 
-        <div className="flex gap-2">
-          {isLoading ? ( 
-            <span className="loading loading-spinner loading-md"></span> 
+        <div className="flex flex-wrap gap-2">
+          {isLoading ? (
+            <span className="loading loading-spinner loading-md"></span>
           ) : (
             <button
               onClick={handleTranslate}
-              className="bg-primary hover:bg-primary-focus text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              disabled={!inputText.trim()}
             >
               Translate
             </button>
@@ -103,7 +116,7 @@ export default function Home() {
           <select
             value={targetLanguage}
             onChange={(e) => setTargetLanguage(e.target.value)}
-            className="select select-bordered w-full max-w-xs"
+            className="select select-bordered flex-grow"
           >
             {languageOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -114,7 +127,7 @@ export default function Home() {
         </div>
 
         {translatedText && (
-          <div className="mt-4 rounded-md border border-gray-300 p-4"> 
+          <div className="mt-4 rounded-md border border-gray-300 p-4">
             <ReactMarkdown className="w-full prose-lg prose-slate">
               {translatedText}
             </ReactMarkdown>
