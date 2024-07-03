@@ -116,7 +116,7 @@ export default function Home() {
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-2 items-center flex-start">
           <select
             value={targetLanguage}
             onChange={(e) => setTargetLanguage(e.target.value)}
