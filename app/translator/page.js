@@ -35,7 +35,7 @@ export default function Home() {
     setIsLoading(true);
     try {
       if (inputText !== "") {
-        const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API);
+        const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GOOGLE_API);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `Please use ${targetLanguage} to translate the following text into ${targetLanguage}, ensuring accuracy and explaining any technical terms: ${inputText}`;
