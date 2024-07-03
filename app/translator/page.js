@@ -13,18 +13,21 @@ export default function Home() {
 
   const languageOptions = [
     { label: "English - en", value: "en" },
+    { label: "Chinese (Simplified) - 中文", value: "zh-CN" },
+    { label: "Chinese (Traditional) - 繁體中文", value: "zh-TW" },
+    { label: "Malay - Bahasa Melayu", value: "ms" },
+    { label: "Tamil - தமிழ்", value: "ta" },
+    { label: "Japanese - 日本語", value: "ja" },
+    { label: "Korean - 한국어", value: "ko" },
     { label: "Spanish - es", value: "es" },
     { label: "French - fr", value: "fr" },
-    { label: "Chinese (Simplified) - 中文", value: "zh-CN" },
-    { label: "Japanese - 日本語", value: "ja" },
     { label: "German - Deutsch", value: "de" },
     { label: "Italian - Italiano", value: "it" },
     { label: "Portuguese - Português", value: "pt" },
     { label: "Russian - Русский", value: "ru" },
-    { label: "Korean - 한국어", value: "ko" },
     { label: "Arabic - العربية", value: "ar" },
     { label: "Hindi - हिंदी", value: "hi" },
-    { label: "Turkish - Türkçe", value: "tr" },
+    { label: "Turkish - Türkçe", value: "tr" }
   ];
 
   const handleInputChange = (e) => {
