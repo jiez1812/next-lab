@@ -56,10 +56,10 @@ export default function Home() {
       if (inputRef.current) {
         // Desktop: Max height 50%
         inputRef.current.style.height = "auto";
-        inputRef.current.style.height = `min(${inputRef.current.scrollHeight}px, 50vh)`;
+        inputRef.current.style.maxHeight = `50vh`; // Use max-height
 
         // Mobile: Max height 100%
-        inputRef.current.style.height = `min(${inputRef.current.scrollHeight}px, 100vh)`;
+        inputRef.current.style.maxHeight = `100vh`; // Use max-height
       }
     };
 
