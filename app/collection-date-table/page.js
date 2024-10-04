@@ -25,10 +25,10 @@ const UniformDates = () => {
     const weekday = date.toLocaleString('default', { weekday: 'long' });
     const ftColor = monthColors[month] || '#FFFFFF';
     return `
-      <div style="display: inline-block; background-color: #FFFFFF; border: 1px solid #ddd; border-radius: 4px; padding: 5px; text-align: center; width: 80px; margin: 5px;">
-        <div style="font-size: 0.9em; color: ${ftColor}"><b>${month}</b></div>
+      <div style="display: inline-block; background-color: #FFFFFF; border: 1px solid #ddd; border-radius: 4px; padding: 4px; text-align: center; width: 80px; margin: 5px;">
+        <div style="font-size: 1.0em; color: ${ftColor}"><b>${month}</b></div>
         <div style="font-size: 1.5em; font-weight: bold; color: #4169E1;">${day}</div>
-        <div style="font-size: 0.8em;">${weekday}</div>
+        <div style="font-size: 1.0em;">${weekday}</div>
       </div>
     `;
   };
@@ -36,11 +36,17 @@ const UniformDates = () => {
   const generateHtml = () => {
     let html = `
       <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0;">
-        <table style="width: 100%; border-collapse: collapse;">
+        <style>
+          .table-hover tr:hover {
+            background-color: #f5f5f5;
+            transition: background-color 0.3s ease;
+          }
+        </style>
+        <table class="table-hover" style="width: 100%; border-collapse: collapse;">
           <thead>
             <tr style="border-bottom: 1px solid #ddd;">
-              <th style="font-weight: bold; text-align: left; padding-bottom: 10px;">Online order cut-off date</th>
-              <th style="font-weight: bold; text-align: left; padding-bottom: 10px;">Uniform collect at school dates</th>
+              <th style="font-weight: bold; text-align: left; padding: 12px; font-size:1.2em;">Online order cut-off date</th>
+              <th style="font-weight: bold; text-align: left; padding: 12px; font-size:1.2em;">Uniform collect at school dates</th>
             </tr>
           </thead>
           <tbody>
@@ -48,11 +54,11 @@ const UniformDates = () => {
 
     dateGroups.forEach(group => {
       html += `
-        <tr>
-          <td style="vertical-align: top;">
+        <tr style="border-bottom: 1px solid #ddd;">
+          <td style="vertical-align: top; padding: 12px;">
             ${createDateCard(group.cutoffDate)}
           </td>
-          <td style="vertical-align: top;">
+          <td style="vertical-align: top; padding: 12px;">
             ${group.collectionDates.map(date => createDateCard(date)).join('')}
           </td>
         </tr>
@@ -92,15 +98,25 @@ const UniformDates = () => {
     }));
   };
 
+  const removeCollectionDate = (index) => {
+    setNewGroup(prev => ({
+      ...prev,
+      collectionDates: prev.collectionDates.filter((_, i) => i !== index)
+    }));
+  };
+
   const addDateGroup = () => {
-    if (newGroup.cutoffDate && newGroup.collectionDates.every(date => date !== null)) {
-      setDateGroups(prev => [...prev, newGroup]);
+    if (newGroup.cutoffDate && newGroup.collectionDates.some(date => date !== null)) {
+      setDateGroups(prev => [...prev, {
+        ...newGroup,
+        collectionDates: newGroup.collectionDates.filter(date => date !== null)
+      }]);
       setNewGroup({
         cutoffDate: null,
         collectionDates: [null]
       });
     } else {
-      alert('Please select all dates before adding the group.');
+      alert('Please select a cut-off date and at least one collection date before adding the group.');
     }
   };
 
@@ -116,6 +132,19 @@ const UniformDates = () => {
     borderRadius: '4px',
     cursor: 'pointer',
     fontSize: '14px'
+  };
+
+  const datePickerStyle = {
+    fontSize: '16px',
+    width: '100%'
+  };
+
+  const resetForm = () => {
+    setDateGroups([]);
+    setNewGroup({
+      cutoffDate: null,
+      collectionDates: [null]
+    });
   };
 
   return (
@@ -134,27 +163,36 @@ const UniformDates = () => {
               dateFormat="MMMM d, yyyy"
               placeholderText="Select cut-off date"
               className="date-picker"
-              style={{ width: '100%' }}
+              style={datePickerStyle}
             />
           </div>
           <div style={{ width: '48%' }}>
             <h3 style={{ color: '#4169E1' }}>Collection Dates</h3>
             {newGroup.collectionDates.map((date, index) => (
-              <div key={index} style={{ marginBottom: '10px' }}>
+              <div key={index} style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
                 <DatePicker
                   selected={date}
                   onChange={(date) => handleDateChange(date, 'collection', index)}
                   dateFormat="MMMM d, yyyy"
                   placeholderText="Select collection date"
                   className="date-picker"
-                  style={{ width: '100%' }}
+                  style={{ ...datePickerStyle, flex: 1 }}
                 />
+                {newGroup.collectionDates.length > 1 && (
+                  <button 
+                    onClick={() => removeCollectionDate(index)} 
+                    style={{ ...buttonStyle, marginLeft: '10px', backgroundColor: '#dc3545', color: 'white', padding: '5px 10px' }}
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             ))}
             <button onClick={addCollectionDate} style={{ ...buttonStyle, backgroundColor: '#4169E1', color: 'white' }}>Add Collection Date</button>
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button onClick={resetForm} style={{ ...buttonStyle, backgroundColor: '#dc3545', color: 'white' }}>Reset</button>
           <button onClick={addDateGroup} style={{ ...buttonStyle, backgroundColor: '#28a745', color: 'white' }}>Add Date Group</button>
         </div>
 
