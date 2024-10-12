@@ -122,21 +122,15 @@ const UniformDates = () => {
 
   const copyHtml = () => {
     navigator.clipboard.writeText(previewHtml);
-    alert('HTML copied to clipboard!');
-  };
-
-  const buttonStyle = {
-    padding: '10px 15px',
-    backgroundColor: '#f0f0f0',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '14px'
-  };
-
-  const datePickerStyle = {
-    fontSize: '16px',
-    width: '100%'
+    const copyButton = document.querySelector('.btn-success.w-full');
+    const originalText = copyButton.textContent;
+    const originalBgColor = copyButton.style.backgroundColor;
+    copyButton.textContent = 'Copied!';
+    copyButton.style.backgroundColor = '#68D391'; // Tailwind green-400
+    setTimeout(() => {
+      copyButton.textContent = originalText;
+      copyButton.style.backgroundColor = originalBgColor;
+    }, 2000);
   };
 
   const resetForm = () => {
@@ -152,54 +146,51 @@ const UniformDates = () => {
       <Head>
         <title>Uniform Dates</title>
       </Head>
-      <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '800px', margin: '0 auto', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ color: '#333', borderBottom: '2px solid #4169E1', paddingBottom: '10px' }}>Create Date Group</h2>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <div style={{ width: '48%' }}>
-            <h3 style={{ color: '#4169E1' }}>Cut-off Date</h3>
+      <div className="prose mx-auto mt-4 shadow-xl p-6 rounded-md bg-slate-50 md:max-w-screen-md">
+        <h2 className="m-0 border-b-2 border-sky-600">Create Date Group</h2>
+        <div className='flex flex-row place-content-around'>
+          <div className='flex flex-col gap-2'>
+            <h3>Cut-off Date</h3>
             <DatePicker
               selected={newGroup.cutoffDate}
               onChange={(date) => handleDateChange(date, 'cutoff')}
               dateFormat="MMMM d, yyyy"
               placeholderText="Select cut-off date"
-              className="date-picker"
-              style={datePickerStyle}
+              className="date-picker input input-bordered w-full max-w-xs"
             />
           </div>
-          <div style={{ width: '48%' }}>
-            <h3 style={{ color: '#4169E1' }}>Collection Dates</h3>
+          <div className='flex flex-col gap-2'>
+            <h3>Collection Dates</h3>
             {newGroup.collectionDates.map((date, index) => (
-              <div key={index} style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
+              <div key={index} className='flex flex-row gap-2'>
                 <DatePicker
                   selected={date}
                   onChange={(date) => handleDateChange(date, 'collection', index)}
                   dateFormat="MMMM d, yyyy"
                   placeholderText="Select collection date"
-                  className="date-picker"
-                  style={{ ...datePickerStyle, flex: 1 }}
+                  className="date-picker input input-bordered w-full max-w-xs"
                 />
                 {newGroup.collectionDates.length > 1 && (
                   <button 
                     onClick={() => removeCollectionDate(index)} 
-                    style={{ ...buttonStyle, marginLeft: '10px', backgroundColor: '#dc3545', color: 'white', padding: '5px 10px' }}
+                    className='btn btn-error'
                   >
                     Remove
                   </button>
                 )}
               </div>
             ))}
-            <button onClick={addCollectionDate} style={{ ...buttonStyle, backgroundColor: '#4169E1', color: 'white' }}>Add Collection Date</button>
+            <button className='btn btn-success' onClick={addCollectionDate}>Add Collection Date</button>
           </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={resetForm} style={{ ...buttonStyle, backgroundColor: '#dc3545', color: 'white' }}>Reset</button>
-          <button onClick={addDateGroup} style={{ ...buttonStyle, backgroundColor: '#28a745', color: 'white' }}>Add Date Group</button>
+        <div className='flex flex-row justify-end gap-2 mt-2 pe-14 pt-2 border-t-2 border-sky-200'>
+          <button className='btn btn-neutral' onClick={resetForm}>Reset</button>
+          <button className='btn btn-primary' onClick={addDateGroup}>Add Date Group</button>
         </div>
-
-        <h2 style={{ color: '#333', borderBottom: '2px solid #4169E1', paddingBottom: '10px', marginTop: '30px' }}>Preview</h2>
+        <h2 className="m-0 border-b-2 border-sky-600">Preview</h2>
         <div dangerouslySetInnerHTML={{ __html: previewHtml }} style={{ backgroundColor: 'white', padding: '15px', borderRadius: '8px', marginTop: '10px' }} />
 
-        <button onClick={copyHtml} style={{ ...buttonStyle, marginTop: '20px' }}>Copy HTML</button>
+        <button className='btn btn-success w-full mt-2' onClick={copyHtml}>Copy HTML</button>
       </div>
     </>
   );
