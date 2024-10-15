@@ -16,6 +16,7 @@
     "@vercel/postgres": "^0.10.0",
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.5.1",
+    "moment-timezone": "^0.5.46",
     "next": "14.1.4",
     "plaiceholder": "^3.0.0",
     "react": "^18",
