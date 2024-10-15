@@ -3,7 +3,7 @@
 import CountdownTimer from "../../components/countdown-timer";
 import { useEffect, useState } from 'react';
 
-export default function CustomCountDown({params}){
+export default function CustomCountDown({ params }) {
     const [festivalName, setFestivalName] = useState('');
     const [festivalDate, setFestivalDate] = useState('');
 
@@ -22,8 +22,8 @@ export default function CustomCountDown({params}){
         <div className="flex flex-col items-center justify-center min-h-screen">
             <article className="prose">
                 <h1 className="text-center capitalize">{festivalName}</h1>
-                <CountdownTimer targetDate={festivalDate}/>
+                {festivalDate && <CountdownTimer targetDate={festivalDate} />}
             </article>
         </div>
-    )
+    );
 }
