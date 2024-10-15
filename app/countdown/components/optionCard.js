@@ -6,7 +6,7 @@ export default function OptionCard({dateDay}) {
     return(
         <div className="card shadow-xl w-80">
             <Link href={`/countdown/${dateDay.festivalName}`}>
-                <div className="card-body">
+                <div className="card-body bg-secondary-content rounded-2xl">
                     <h2 className="card-title">
                         {dateDay.festivalName}
                     </h2>

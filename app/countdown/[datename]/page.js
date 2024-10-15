@@ -11,9 +11,11 @@ export default async function DateNamePage({params}){
     const festivalDate = moment(dateQuery.rows[0].festivalDate).tz('Asia/Singapore');
     const shortDate = festivalDate.format('YYYY-MM-DD');
     return (
-        <>
-            {dateName}
+        <div className="flex flex-col items-center justify-center min-h-screen">
+            <article className="prose">
+            <h1 className="text-center capitalize">{dateName}</h1>
             <CountdownTimer targetDate={shortDate}/>
-        </>
+            </article>
+        </div>
     )
 }

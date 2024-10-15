@@ -1,47 +1,60 @@
 'use client'
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-const CustomCard = ({ dateDay }) => {
-    const [date, setDate] = useState(dateDay.date || '');
-    const [festivalName, setFestivalName] = useState(dateDay.festivalName || '');
+export default function CustomCard() {
+    const [festivalName, setFestivalName] = useState('');
+    const [festivalDate, setFestivalDate] = useState('');
+    const [error, setError] = useState('');
+    const router = useRouter();
 
-    const handleDateChange = (e) => {
-        setDate(e.target.value);
-    };
+    const handleClicked = () => {
+        if (!festivalName || !festivalDate) {
+            setError('Please fill in both fields');
+        }else{
+            router.push(`/countdown/custom/${festivalName}&${festivalDate}`);
+        }
+    }
 
-    const handleFestivalNameChange = (e) => {
-        setFestivalName(e.target.value);
-    };
+    const handleFestivalNameChange = (event) => {
+        setFestivalName(event.target.value);
+    }
+
+    const handleFestivalDateChange = (event) => {
+        setFestivalDate(event.target.value);
+    }
 
     return (
-        <div className="card">
-            <div className="card-body">
-                <h5 className="card-title">Enter Festival Details</h5>
-                <div className="form-group">
-                    <label htmlFor="date">Date</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        id="date"
-                        value={date}
-                        onChange={handleDateChange}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="festivalName">Festival Name</label>
+        <div className="card shadow-xl w-80">
+            <div className="card-body bg-primary-content rounded-2xl">
+                <h2 className="card-title">
+                    Custom Festival
+                </h2>
+                <div>
                     <input
                         type="text"
-                        className="form-control"
-                        id="festivalName"
-                        value={festivalName}
+                        placeholder="Festival Name"
+                        className={`input input-bordered w-fit ${error ? 'border-error' : ''}`}
                         onChange={handleFestivalNameChange}
                     />
                 </div>
-                <Link href={`/countdown/${festivalName}`}>Go to Countdown</Link>
+                <div>
+                    <input
+                        type="date"
+                        className={`input input-bordered w-fit ${error ? 'border-error' : ''}`}
+                        onChange={handleFestivalDateChange}
+                    />
+                </div>
+                {error && <p className="text-error text-xs">{error}</p>}
+                <div>
+                    <button
+                        className="btn btn-primary"
+                        onClick={handleClicked}
+                    >
+                        Create Countdown
+                    </button>
+                </div>
             </div>
         </div>
     );
-};
-
-export default CustomCard;
+}

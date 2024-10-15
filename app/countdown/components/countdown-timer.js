@@ -26,9 +26,40 @@ export default function CountdownTimer({targetDate}){
         setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return(
-        <div>
-            {timeLeft.days} days, {timeLeft.hours} hours, {timeLeft.minutes} minutes, and {timeLeft.seconds} seconds
-        </div>
-    )
+    const formatTime = (time) => {
+      return time < 10 ? `0${time}` : time;
+    };
+
+    return (
+      <div>
+      {Object.keys(timeLeft).length === 0 ? (
+      <p>The date is past...🤦‍♂️🤦‍♀️</p>
+      ) : (
+      <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
+      {timeLeft.days > 0 && (
+      <>
+      <span className="text-6xl text-right">{formatTime(timeLeft.days)}</span>
+      <span className="text-xl">days</span>
+      </>
+      )}
+      {timeLeft.hours > 0 && (
+      <>
+      <span className="text-6xl text-right">{formatTime(timeLeft.hours)}</span>
+      <span className="text-xl">hours</span> 
+      </>
+      )}
+      {timeLeft.minutes > 0 && (
+      <>
+      <span className="text-6xl text-right">{formatTime(timeLeft.minutes)}</span>
+      <span className="text-xl">minutes</span> 
+      </>
+      )}
+      <>
+      <span className="text-6xl text-right">{formatTime(timeLeft.seconds)}</span>
+      <span className="text-xl">seconds</span> 
+      </>
+      </div>
+      )}
+      </div>
+    );
 }
