@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from "react";
+import WaveRipple from "./WaveRipple";
 
 export default function CountdownTimer({ targetDate }) {
     const calculateTimeLeft = () => {
@@ -19,10 +20,12 @@ export default function CountdownTimer({ targetDate }) {
     };
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft());
+            setIsActive(Object.keys(timeLeft).length > 0);
         }, 1000);
 
         return () => clearTimeout(timer);
@@ -32,10 +35,22 @@ export default function CountdownTimer({ targetDate }) {
         return time < 10 ? `0${time}` : time;
     };
 
+    const isToday = () => {
+        const today = new Date();
+        const target = new Date(targetDate);
+        return (
+            today.getDate() === target.getDate() &&
+            today.getMonth() === target.getMonth() &&
+            today.getFullYear() === target.getFullYear()
+        );
+    };
+
     return (
-        <div>
-            {Object.keys(timeLeft).length === 0 ? (
-                <p>The date is past...🤦‍♂️🤦‍♀️</p>
+        <div className="relative">
+            {Object.keys(timeLeft).length < 0 ? (
+                <p className="text-xl">The date is past...🤦‍♂️🤦‍♀️</p>
+            ) : isToday() ? (
+                <p className="text-xl">It is today!</p>
             ) : (
                 <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
                     {timeLeft.days > 0 && (
@@ -62,6 +77,7 @@ export default function CountdownTimer({ targetDate }) {
                     </>
                 </div>
             )}
+            <WaveRipple isActive={isActive} />
         </div>
     );
 }
