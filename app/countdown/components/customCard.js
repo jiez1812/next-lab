@@ -24,8 +24,8 @@ export default function CustomCard() {
 
     return (
         <div className="card shadow-xl w-80">
-            <div className="card-body bg-primary-content rounded-2xl">
-                <h2 className="card-title text-2xl justify-center">
+            <div className="card-body bg-base-200 rounded-2xl">
+                <h2 className="card-title text-2xl justify-center text-primary">
                     Custom Event
                 </h2>
                 <div className='form-control gap-3'>
@@ -38,9 +38,10 @@ export default function CustomCard() {
                     <div className='flex flex-col gap-3'>
                         <Datepicker
                             placeholder="Event Date"
-                            primaryColor={"blue"}
+                            primaryColor={"indigo"}
                             inputClassName={`input input-bordered w-full ${error ? 'border-error' : ''}`}
                             asSingle={true}
+                            asTimePicker={true}
                             value={eventDate}
                             useRange={false}
                             onChange={newValue => setEventDate(newValue)}
