@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from "react";
-import WaveRipple from "./WaveRipple";
 
 export default function CountdownTimer({ targetDate }) {
     const calculateTimeLeft = () => {
@@ -77,7 +76,6 @@ export default function CountdownTimer({ targetDate }) {
                     </>
                 </div>
             )}
-            <WaveRipple isActive={isActive} />
         </div>
     );
 }

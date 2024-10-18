@@ -13,7 +13,8 @@ export default function CustomCard() {
         if (!eventName || !eventDate.startDate) {
             setError('Please fill in both fields');
         } else {
-            router.push(`/countdown/custom/${eventName}&${eventDate}`);
+            const targetDate = eventDate.startDate.toISOString().split('T')[0];
+            router.push(`/countdown/custom/${eventName}&${targetDate}`);
         }
     }
 
@@ -42,7 +43,7 @@ export default function CustomCard() {
                             asSingle={true}
                             value={eventDate}
                             useRange={false}
-                            onChange={date => setEventDate(date)}
+                            onChange={newValue => setEventDate(newValue)}
                         />
                     </div>
                     {error && <span className="text-error text-xs">{error}</span>}
