@@ -1,0 +1,24 @@
+.centerGlowing {
+    box-shadow: 
+        0px 0px 500px #4c00e551
+}
+
+.topGlowing {
+    box-shadow: 
+        0px 0px 10px #4c00e528
+}
+
+.topGlowing:hover {
+    animation: glowing 1s forwards;
+    box-shadow: 0 0 20px #4c00e528;
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 10px #4c00e528
+    }
+    100% {
+        box-shadow: 0 0 20px #4c00e551
+    }
+    
+}
