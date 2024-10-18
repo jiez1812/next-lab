@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Datepicker from "react-tailwindcss-datepicker";
+import "../styles/BoxGlowing.css"
 
 export default function CustomCard() {
     const [eventName, setEventName] = useState('');
@@ -23,8 +24,8 @@ export default function CustomCard() {
     }
 
     return (
-        <div className="card shadow-xl w-80">
-            <div className="card-body bg-base-200 rounded-2xl">
+        <div className="card w-80 centerGlowing">
+            <div className="card-body bg-base-100 rounded-2xl">
                 <h2 className="card-title text-2xl justify-center text-primary">
                     Custom Event
                 </h2>
