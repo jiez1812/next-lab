@@ -4,9 +4,9 @@ import Link from 'next/link';
 
 export default function OptionCard({dateDay}) {
     return(
-        <div className="card shadow-xl w-80">
+        <div className="card shadow-xl w-80 transition ease-in-out delay-150 hover:-translate-y-3">
             <Link href={`/countdown/${dateDay.festivalName}`}>
-                <div className="card-body bg-secondary-content rounded-2xl">
+                <div className="card-body bg-primary-content rounded-2xl">
                     <h2 className="card-title">
                         {dateDay.festivalName}
                     </h2>

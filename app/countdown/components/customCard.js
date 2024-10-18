@@ -41,6 +41,7 @@ export default function CustomCard() {
                             primaryColor={"blue"}
                             inputClassName={`input input-bordered w-full ${error ? 'border-error' : ''}`}
                             asSingle={true}
+                            asTimePicker={true}
                             value={eventDate}
                             useRange={false}
                             onChange={newValue => setEventDate(newValue)}
