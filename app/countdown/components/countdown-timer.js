@@ -1,9 +1,12 @@
 'use client';
 import { useState, useEffect } from "react";
+import moment from 'moment-timezone';
 
 export default function CountdownTimer({ targetDate }) {
     const calculateTimeLeft = () => {
-        const difference = +new Date(targetDate) - +new Date();
+        const now = moment().tz(moment.tz.guess());
+        const target = moment.tz(targetDate, moment.tz.guess());
+        const difference = target.diff(now);
         let timeLeft = {};
 
         if (difference > 0) {
@@ -19,12 +22,10 @@ export default function CountdownTimer({ targetDate }) {
     };
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-    const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft());
-            setIsActive(Object.keys(timeLeft).length > 0);
         }, 1000);
 
         return () => clearTimeout(timer);
@@ -58,13 +59,13 @@ export default function CountdownTimer({ targetDate }) {
                             <span className="text-xl">days</span>
                         </>
                     )}
-                    {timeLeft.hours > 0 && (
+                    {(timeLeft.days > 0 || timeLeft.hours > 0) && (
                         <>
                             <span className="text-6xl text-right text-primary">{formatTime(timeLeft.hours)}</span>
                             <span className="text-xl">hours</span>
                         </>
                     )}
-                    {timeLeft.minutes > 0 && (
+                    {(timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0) && (
                         <>
                             <span className="text-6xl text-right text-primary">{formatTime(timeLeft.minutes)}</span>
                             <span className="text-xl">minutes</span>

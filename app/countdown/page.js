@@ -15,9 +15,10 @@ export default async function CountdownPage() {
   const dateOptions = result.rows;
 
   const dateOptionsWithShortDate = dateOptions.map(option => {
-  const festivalDate = moment(option.festivalDate).tz('Asia/Singapore');
-  const shortDate = festivalDate.format('DD MMM YYYY');
-  return {
+    // Ensure the date is interpreted in the correct timezone
+    const festivalDate = moment.tz(option.festivalDate, 'Asia/Singapore');
+    const shortDate = festivalDate.format('DD MMM YYYY');
+    return {
       ...option,
       festivalDate: shortDate
     };
@@ -35,4 +36,4 @@ export default async function CountdownPage() {
       </div>
     </div>
   );
-  }
+}
