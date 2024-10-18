@@ -23,6 +23,7 @@
     "react-datepicker": "^7.4.0",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
+    "react-tailwindcss-datepicker": "^1.7.2",
     "sharp": "^0.33.3",
     "styled-components": "^6.1.11"
   },

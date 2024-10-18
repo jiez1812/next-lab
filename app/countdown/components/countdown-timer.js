@@ -44,13 +44,13 @@ export default function CountdownTimer({ targetDate }) {
             today.getFullYear() === target.getFullYear()
         );
     };
-
+    
     return (
         <div className="relative">
-            {Object.keys(timeLeft).length < 0 ? (
-                <p className="text-xl">The date is past...🤦‍♂️🤦‍♀️</p>
-            ) : isToday() ? (
+            {isToday() ? (
                 <p className="text-xl">It is today!</p>
+            ) : Object.keys(timeLeft).length === 0 ? (
+                <p className="text-xl">The date is past...🤦‍♂️🤦‍♀️</p>
             ) : (
                 <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
                     {timeLeft.days > 0 && (

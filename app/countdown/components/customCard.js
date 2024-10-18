@@ -1,52 +1,51 @@
 'use client'
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Datepicker from "react-tailwindcss-datepicker";
 
 export default function CustomCard() {
-    const [festivalName, setFestivalName] = useState('');
-    const [festivalDate, setFestivalDate] = useState('');
+    const [eventName, setEventName] = useState('');
+    const [eventDate, setEventDate] = useState({startDate:null, endDate:null});
     const [error, setError] = useState('');
     const router = useRouter();
 
     const handleClicked = () => {
-        if (!festivalName || !festivalDate) {
+        if (!eventName || !eventDate.startDate) {
             setError('Please fill in both fields');
-        }else{
-            router.push(`/countdown/custom/${festivalName}&${festivalDate}`);
+        } else {
+            router.push(`/countdown/custom/${eventName}&${eventDate}`);
         }
     }
 
-    const handleFestivalNameChange = (event) => {
-        setFestivalName(event.target.value);
-    }
-
-    const handleFestivalDateChange = (event) => {
-        setFestivalDate(event.target.value);
+    const handleEventNameChange = (event) => {
+        setEventName(event.target.value);
     }
 
     return (
         <div className="card shadow-xl w-80">
             <div className="card-body bg-primary-content rounded-2xl">
-                <h2 className="card-title">
-                    Custom Festival
+                <h2 className="card-title text-2xl justify-center">
+                    Custom Event
                 </h2>
-                <div>
+                <div className='form-control gap-3'>
                     <input
                         type="text"
-                        placeholder="Festival Name"
-                        className={`input input-bordered w-fit ${error ? 'border-error' : ''}`}
-                        onChange={handleFestivalNameChange}
+                        placeholder="Event Name"
+                        className={`input input-bordered w-full ${error ? 'border-error' : ''}`}
+                        onChange={handleEventNameChange}
                     />
-                </div>
-                <div>
-                    <input
-                        type="date"
-                        className={`input input-bordered w-fit ${error ? 'border-error' : ''}`}
-                        onChange={handleFestivalDateChange}
-                    />
-                </div>
-                {error && <p className="text-error text-xs">{error}</p>}
-                <div>
+                    <div className='flex flex-col gap-3'>
+                        <Datepicker
+                            placeholder="Event Date"
+                            primaryColor={"blue"}
+                            inputClassName={`input input-bordered w-full ${error ? 'border-error' : ''}`}
+                            asSingle={true}
+                            value={eventDate}
+                            useRange={false}
+                            onChange={date => setEventDate(date)}
+                        />
+                    </div>
+                    {error && <span className="text-error text-xs">{error}</span>}
                     <button
                         className="btn btn-primary"
                         onClick={handleClicked}
