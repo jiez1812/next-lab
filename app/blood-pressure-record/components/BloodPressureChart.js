@@ -73,90 +73,69 @@ export default function BloodPressureChart() {
 
         setChartData({
           labels: consistentLabels,
-          datasets: [
-            {
-              type: 'bar',
-              label: 'Morning Systolic',
+          datasets: [            {              type: 'bar',
+              label: 'Systolic',
               data: allDates.flatMap(date => {
                 const morningRecord = morningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
                 );
-                return [morningRecord?.systolic || null, null]; // null for evening slot
-              }),
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
-              stack: 'morning',
-              order: 2,
-            },
-            {
-              type: 'bar',
-              label: 'Morning Diastolic',
-              data: allDates.flatMap(date => {
-                const morningRecord = morningData.find(record => 
-                  new Date(record.date).toLocaleDateString() === date
-                );
-                return [morningRecord?.diastolic || null, null]; // null for evening slot
-              }),
-              backgroundColor: 'rgba(53, 162, 235, 0.5)',
-              stack: 'morning',
-              order: 2,
-            },
-            {
-              type: 'bar',
-              label: 'Evening Systolic',
-              data: allDates.flatMap(date => {
                 const eveningRecord = eveningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
                 );
-                return [null, eveningRecord?.systolic || null]; // null for morning slot
+                return [morningRecord?.systolic || null, eveningRecord?.systolic || null];
               }),
-              backgroundColor: 'rgba(255, 99, 132, 0.8)',
-              stack: 'evening',
+              backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 0.8)'],
+              borderColor: ['transparent', 'rgba(255, 99, 132, 1)'],
+              borderWidth: [0, 2],
+              stack: true,
               order: 2,
-              borderWidth: 2,
-              borderColor: 'rgba(255, 99, 132, 1)',
             },
             {
               type: 'bar',
-              label: 'Evening Diastolic',
+              label: 'Diastolic',
               data: allDates.flatMap(date => {
-                const eveningRecord = eveningData.find(record => 
-                  new Date(record.date).toLocaleDateString() === date
-                );
-                return [null, eveningRecord?.diastolic || null]; // null for morning slot
-              }),
-              backgroundColor: 'rgba(53, 162, 235, 0.8)',
-              stack: 'evening',
-              order: 2,
-              borderWidth: 2,
-              borderColor: 'rgba(53, 162, 235, 1)',
-            },
-            {              type: 'line',
-              label: 'Morning Heart Rate',              data: allDates.flatMap(date => {
                 const morningRecord = morningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
                 );
-                return [morningRecord?.heartRate || null, null]; // null for evening slot
+                const eveningRecord = eveningData.find(record => 
+                  new Date(record.date).toLocaleDateString() === date
+                );
+                // Calculate the difference between diastolic and systolic
+                const morningBase = morningRecord?.systolic || 0;
+                const eveningBase = eveningRecord?.systolic || 0;
+                const morningValue = morningRecord?.diastolic ? morningRecord.diastolic - morningBase : null;
+                const eveningValue = eveningRecord?.diastolic ? eveningRecord.diastolic - eveningBase : null;
+                return [morningValue, eveningValue];
+              }),
+              backgroundColor: ['rgba(53, 162, 235, 0.5)', 'rgba(53, 162, 235, 0.8)'],
+              borderColor: ['transparent', 'rgba(53, 162, 235, 1)'],
+              borderWidth: [0, 2],
+              stack: true,
+              order: 2,
+            },
+            {
+              type: 'line',
+              label: 'Heart Rate',
+              data: allDates.flatMap(date => {
+                const morningRecord = morningData.find(record => 
+                  new Date(record.date).toLocaleDateString() === date
+                );
+                const eveningRecord = eveningData.find(record => 
+                  new Date(record.date).toLocaleDateString() === date
+                );
+                return [
+                  morningRecord?.heartRate || null, 
+                  eveningRecord?.heartRate || null
+                ];
               }),
               borderColor: 'rgb(75, 192, 192)',
               backgroundColor: 'rgba(75, 192, 192, 0.5)',
               tension: 0.1,
               order: 1,
               yAxisID: 'y1',
-              borderDash: [],
-            },
-            {              type: 'line',
-              label: 'Evening Heart Rate',              data: allDates.flatMap(date => {
-                const eveningRecord = eveningData.find(record => 
-                  new Date(record.date).toLocaleDateString() === date
-                );
-                return [null, eveningRecord?.heartRate || null]; // null for morning slot
-              }),
-              borderColor: 'rgb(75, 192, 192)',
-              backgroundColor: 'rgba(75, 192, 192, 0.5)',
-              tension: 0.1,
-              order: 1,
-              yAxisID: 'y1',
-              borderDash: [5, 5],
+              segment: {
+                borderDash: context => context.p0DataIndex % 2 === 1 ? [5, 5] : [],
+              },
             },
           ],
         });
