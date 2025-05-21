@@ -17,6 +17,7 @@ import { Chart } from 'react-chartjs-2';
 // Import pattern fill plugin
 import 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
+import { chartConfig } from '../config/chartConfig';
 
 ChartJS.register(
   CategoryScale,
@@ -90,8 +91,8 @@ export default function BloodPressureChart() {
                 );
                 return [morningRecord?.diastolic || null, eveningRecord?.diastolic || null];
               }),
-              backgroundColor: ['rgba(53, 162, 235, 0.5)', 'rgba(53, 162, 235, 0.8)'],
-              borderColor: ['transparent', 'rgba(53, 162, 235, 1)'],
+              backgroundColor: [chartConfig.colors.diastolic.morning, chartConfig.colors.diastolic.evening],
+              borderColor: [chartConfig.colors.diastolic.borderMorning, chartConfig.colors.diastolic.borderEvening],
               borderWidth: [0, 2],
               stack: 'stack1',
               order: 2,
@@ -112,8 +113,8 @@ export default function BloodPressureChart() {
                   eveningRecord.systolic - eveningRecord.diastolic : null;
                 return [morningDiff, eveningDiff];
               }),
-              backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 0.8)'],
-              borderColor: ['transparent', 'rgba(255, 99, 132, 1)'],
+              backgroundColor: [chartConfig.colors.systolic.morning, chartConfig.colors.systolic.evening],
+              borderColor: [chartConfig.colors.systolic.borderMorning, chartConfig.colors.systolic.borderEvening],
               borderWidth: [0, 2],
               stack: 'stack1',
               order: 2,
@@ -132,8 +133,9 @@ export default function BloodPressureChart() {
                   morningRecord?.heartRate || null, 
                   eveningRecord?.heartRate || null
                 ];
-              }),              borderColor: 'rgb(255, 0, 0)',
-              backgroundColor: 'rgba(255, 0, 0, 0.5)',
+              }),
+              borderColor: chartConfig.colors.heartRate.line,
+              backgroundColor: chartConfig.colors.heartRate.background,
               tension: 0.1,
               order: 1,
               yAxisID: 'y1',
@@ -162,18 +164,14 @@ export default function BloodPressureChart() {
     plugins: {
       title: {
         display: true,
-        text: 'Blood Pressure & Heart Rate Last 7 Days (Morning vs Evening)',
+        text: chartConfig.chartTitle.main,
         padding: {
           bottom: 30
         }
       },
       subtitle: {
         display: true,
-        text: [
-          'Standard Range:',
-          'Systolic: 90-120 mmHg',
-          'Diastolic: 60-80 mmHg'
-        ],
+        text: chartConfig.chartTitle.subtitle,
         position: 'bottom',
         align: 'start',
         color: 'rgb(102, 102, 102)',
@@ -212,25 +210,25 @@ export default function BloodPressureChart() {
         annotations: {
           systolicArea: {
             type: 'box',
-            yMin: 90,
-            yMax: 120,
-            backgroundColor: 'rgba(255, 99, 132, 0.05)',
+            yMin: chartConfig.standardRanges.systolic.min,
+            yMax: chartConfig.standardRanges.systolic.max,
+            backgroundColor: chartConfig.standardRanges.systolic.backgroundColor,
             borderColor: 'transparent',
             drawTime: 'beforeDatasetsDraw',
           },
           diastolicArea: {
             type: 'box',
-            yMin: 60,
-            yMax: 80,
-            backgroundColor: 'rgba(53, 162, 235, 0.05)',
+            yMin: chartConfig.standardRanges.diastolic.min,
+            yMax: chartConfig.standardRanges.diastolic.max,
+            backgroundColor: chartConfig.standardRanges.diastolic.backgroundColor,
             borderColor: 'transparent',
             drawTime: 'beforeDatasetsDraw',
           },
           systolicUpperLine: {
             type: 'line',
-            yMin: 120,
-            yMax: 120,
-            borderColor: 'rgba(255, 99, 132, 0.3)',
+            yMin: chartConfig.standardRanges.systolic.max,
+            yMax: chartConfig.standardRanges.systolic.max,
+            borderColor: chartConfig.standardRanges.systolic.lineColor,
             borderWidth: 1,
             borderDash: [4, 4],
             drawTime: 'beforeDatasetsDraw',
@@ -240,9 +238,9 @@ export default function BloodPressureChart() {
           },
           systolicLowerLine: {
             type: 'line',
-            yMin: 90,
-            yMax: 90,
-            borderColor: 'rgba(255, 99, 132, 0.3)',
+            yMin: chartConfig.standardRanges.systolic.min,
+            yMax: chartConfig.standardRanges.systolic.min,
+            borderColor: chartConfig.standardRanges.systolic.lineColor,
             borderWidth: 1,
             borderDash: [4, 4],
             drawTime: 'beforeDatasetsDraw',
@@ -252,9 +250,9 @@ export default function BloodPressureChart() {
           },
           diastolicUpperLine: {
             type: 'line',
-            yMin: 80,
-            yMax: 80,
-            borderColor: 'rgba(53, 162, 235, 0.3)',
+            yMin: chartConfig.standardRanges.diastolic.max,
+            yMax: chartConfig.standardRanges.diastolic.max,
+            borderColor: chartConfig.standardRanges.diastolic.lineColor,
             borderWidth: 1,
             borderDash: [4, 4],
             drawTime: 'beforeDatasetsDraw',
@@ -264,9 +262,9 @@ export default function BloodPressureChart() {
           },
           diastolicLowerLine: {
             type: 'line',
-            yMin: 60,
-            yMax: 60,
-            borderColor: 'rgba(53, 162, 235, 0.3)',
+            yMin: chartConfig.standardRanges.diastolic.min,
+            yMax: chartConfig.standardRanges.diastolic.min,
+            borderColor: chartConfig.standardRanges.diastolic.lineColor,
             borderWidth: 1,
             borderDash: [4, 4],
             drawTime: 'beforeDatasetsDraw',
