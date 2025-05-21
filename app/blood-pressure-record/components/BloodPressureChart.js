@@ -127,9 +127,8 @@ export default function BloodPressureChart() {
                   morningRecord?.heartRate || null, 
                   eveningRecord?.heartRate || null
                 ];
-              }),
-              borderColor: 'rgb(75, 192, 192)',
-              backgroundColor: 'rgba(75, 192, 192, 0.5)',
+              }),              borderColor: 'rgb(255, 0, 0)',
+              backgroundColor: 'rgba(255, 0, 0, 0.5)',
               tension: 0.1,
               order: 1,
               yAxisID: 'y1',
