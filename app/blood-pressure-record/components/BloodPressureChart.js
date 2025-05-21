@@ -37,6 +37,19 @@ export default function BloodPressureChart({ data, selectedDay }) {
     labels: [],
     datasets: [],
   });
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Add window resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    handleResize(); // Check initial size
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!data) return;
@@ -176,11 +189,11 @@ export default function BloodPressureChart({ data, selectedDay }) {
         display: true,
         text: chartConfig.chartTitle.main,
         padding: {
-          bottom: 30
+          bottom: isMobile ? 15 : 30
         }
       },
       subtitle: {
-        display: true,
+        display: !isMobile, // Hide subtitle on mobile
         text: chartConfig.chartTitle.subtitle,
         position: 'bottom',
         align: 'start',
@@ -195,8 +208,13 @@ export default function BloodPressureChart({ data, selectedDay }) {
       },
       legend: {
         position: 'top',
+        align: isMobile ? 'start' : 'center',
         labels: {
           usePointStyle: true,
+          boxWidth: isMobile ? 8 : 10,
+          font: {
+            size: isMobile ? 10 : 12
+          }
         },
       },
       tooltip: {
@@ -293,31 +311,51 @@ export default function BloodPressureChart({ data, selectedDay }) {
         type: 'linear',
         position: 'left',
         title: {
-          display: true,
+          display: !isMobile,
           text: 'Blood Pressure (mmHg)',
         },
         grid: {
           color: 'rgba(0, 0, 0, 0.1)',
         },
-      },      y1: {
+        ticks: {
+          font: {
+            size: isMobile ? 10 : 12
+          }
+        }
+      },
+      y1: {
         beginAtZero: true,
         min: 40,
         max: 120,
         type: 'linear',
         position: 'right',
         title: {
-          display: true,
+          display: !isMobile,
           text: 'Heart Rate (BPM)',
         },
         grid: {
           drawOnChartArea: false,
         },
+        ticks: {
+          font: {
+            size: isMobile ? 10 : 12
+          }
+        }
       },
+      x: {
+        ticks: {
+          font: {
+            size: isMobile ? 8 : 12
+          },
+          maxRotation: isMobile ? 45 : 0,
+          minRotation: isMobile ? 45 : 0
+        }
+      }
     },
   };
 
   return (
-    <div className="w-full h-[500px] p-4 bg-base-100 rounded-lg shadow-lg">
+    <div className={`w-full ${isMobile ? 'h-[400px]' : 'h-[500px]'} p-4 bg-base-100 rounded-lg shadow-lg`}>
       <Chart type="bar" data={chartData} options={options} />
     </div>
   );
