@@ -6,16 +6,16 @@ export const chartConfig = {
       background: 'rgba(255, 0, 0, 0.5)'
     },
     diastolic: {
-      morning: 'rgba(53, 162, 235, 0.5)',
-      evening: 'rgba(53, 162, 235, 0.8)',
+      morning: 'rgba(53, 162, 235, 0.8)',
+      evening: 'rgba(32, 97, 141, 0.8)',
       borderMorning: 'transparent',
-      borderEvening: 'rgba(53, 162, 235, 1)'
+      borderEvening: 'rgba(32, 97, 141, 1)'
     },
     systolic: {
-      morning: 'rgba(255, 99, 132, 0.5)',
-      evening: 'rgba(255, 99, 132, 0.8)',
+      morning: 'rgba(255, 99, 132, 0.8)',
+      evening: 'rgba(153, 59, 79, 0.8)',
       borderMorning: 'transparent',
-      borderEvening: 'rgba(255, 99, 132, 1)'
+      borderEvening: 'rgba(153, 59, 79, 1)'
     }
   },
 
