@@ -210,13 +210,30 @@ export default function BloodPressureChart() {
       },
       annotation: {
         annotations: {
+          systolicArea: {
+            type: 'box',
+            yMin: 90,
+            yMax: 120,
+            backgroundColor: 'rgba(255, 99, 132, 0.05)',
+            borderColor: 'transparent',
+            drawTime: 'beforeDatasetsDraw',
+          },
+          diastolicArea: {
+            type: 'box',
+            yMin: 60,
+            yMax: 80,
+            backgroundColor: 'rgba(53, 162, 235, 0.05)',
+            borderColor: 'transparent',
+            drawTime: 'beforeDatasetsDraw',
+          },
           systolicUpperLine: {
             type: 'line',
             yMin: 120,
             yMax: 120,
-            borderColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 0.3)',
             borderWidth: 1,
             borderDash: [4, 4],
+            drawTime: 'beforeDatasetsDraw',
             label: {
               display: false
             }
@@ -225,9 +242,10 @@ export default function BloodPressureChart() {
             type: 'line',
             yMin: 90,
             yMax: 90,
-            borderColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 0.3)',
             borderWidth: 1,
             borderDash: [4, 4],
+            drawTime: 'beforeDatasetsDraw',
             label: {
               display: false
             }
@@ -236,9 +254,10 @@ export default function BloodPressureChart() {
             type: 'line',
             yMin: 80,
             yMax: 80,
-            borderColor: 'rgba(53, 162, 235, 0.2)',
+            borderColor: 'rgba(53, 162, 235, 0.3)',
             borderWidth: 1,
             borderDash: [4, 4],
+            drawTime: 'beforeDatasetsDraw',
             label: {
               display: false
             }
@@ -247,9 +266,10 @@ export default function BloodPressureChart() {
             type: 'line',
             yMin: 60,
             yMax: 60,
-            borderColor: 'rgba(53, 162, 235, 0.2)',
+            borderColor: 'rgba(53, 162, 235, 0.3)',
             borderWidth: 1,
             borderDash: [4, 4],
+            drawTime: 'beforeDatasetsDraw',
             label: {
               display: false
             }
