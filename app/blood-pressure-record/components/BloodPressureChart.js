@@ -11,7 +11,9 @@ import {
   Tooltip,
   Legend,
   PointElement,
-  SubTitle
+  SubTitle,
+  BarController,
+  LineController
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 // Import pattern fill plugin
@@ -19,11 +21,14 @@ import 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { chartConfig } from '../config/chartConfig';
 
+// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
   LineElement,
+  BarController,
+  LineController,
   Title,
   Tooltip,
   Legend,
@@ -353,10 +358,11 @@ export default function BloodPressureChart({ data, selectedDay }) {
       }
     },
   };
-
   return (
     <div className={`w-full ${isMobile ? 'h-[400px]' : 'h-[500px]'} p-4 bg-base-100 rounded-lg shadow-lg`}>
-      <Chart type="bar" data={chartData} options={options} />
+      {typeof window !== 'undefined' && (
+        <Chart type="bar" data={chartData} options={options} />
+      )}
     </div>
   );
 }
