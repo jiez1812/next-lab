@@ -80,7 +80,7 @@ export default function BloodPressureChart() {
           datasets: [
             {
               type: 'bar',
-              label: 'Systolic',
+              label: 'Diastolic',
               data: allDates.flatMap(date => {
                 const morningRecord = morningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
@@ -88,7 +88,7 @@ export default function BloodPressureChart() {
                 const eveningRecord = eveningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
                 );
-                return [morningRecord?.systolic || null, eveningRecord?.systolic || null];
+                return [morningRecord?.diastolic || null, eveningRecord?.diastolic || null];
               }),
               backgroundColor: ['rgba(53, 162, 235, 0.5)', 'rgba(53, 162, 235, 0.8)'],
               borderColor: ['transparent', 'rgba(53, 162, 235, 1)'],
@@ -98,7 +98,7 @@ export default function BloodPressureChart() {
             },
             {
               type: 'bar',
-              label: 'Diastolic',
+              label: 'Systolic - Diastolic',
               data: allDates.flatMap(date => {
                 const morningRecord = morningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
@@ -106,9 +106,11 @@ export default function BloodPressureChart() {
                 const eveningRecord = eveningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
                 );
-                const morningDiastolic = morningRecord?.diastolic ? morningRecord.diastolic - morningRecord.systolic : null;
-                const eveningDiastolic = eveningRecord?.diastolic ? eveningRecord.diastolic - eveningRecord.systolic : null;
-                return [morningDiastolic, eveningDiastolic];
+                const morningDiff = morningRecord?.systolic && morningRecord?.diastolic ? 
+                  morningRecord.systolic - morningRecord.diastolic : null;
+                const eveningDiff = eveningRecord?.systolic && eveningRecord?.diastolic ? 
+                  eveningRecord.systolic - eveningRecord.diastolic : null;
+                return [morningDiff, eveningDiff];
               }),
               backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 0.8)'],
               borderColor: ['transparent', 'rgba(255, 99, 132, 1)'],
@@ -194,7 +196,65 @@ export default function BloodPressureChart() {
           title: (tooltipItems) => {
             return tooltipItems[0].label;
           },
+          label: (context) => {
+            const datasetLabel = context.dataset.label;
+            const value = context.raw;
+            
+            if (datasetLabel === 'Systolic - Diastolic') {
+              const diastolicValue = context.chart.data.datasets[0].data[context.dataIndex];
+              return `Systolic: ${value + diastolicValue}`;
+            }
+            return `${datasetLabel}: ${value}`;
+          }
         },
+      },
+      annotation: {
+        annotations: {
+          systolicUpperLine: {
+            type: 'line',
+            yMin: 120,
+            yMax: 120,
+            borderColor: 'rgba(255, 99, 132, 0.2)',
+            borderWidth: 1,
+            borderDash: [4, 4],
+            label: {
+              display: false
+            }
+          },
+          systolicLowerLine: {
+            type: 'line',
+            yMin: 90,
+            yMax: 90,
+            borderColor: 'rgba(255, 99, 132, 0.2)',
+            borderWidth: 1,
+            borderDash: [4, 4],
+            label: {
+              display: false
+            }
+          },
+          diastolicUpperLine: {
+            type: 'line',
+            yMin: 80,
+            yMax: 80,
+            borderColor: 'rgba(53, 162, 235, 0.2)',
+            borderWidth: 1,
+            borderDash: [4, 4],
+            label: {
+              display: false
+            }
+          },
+          diastolicLowerLine: {
+            type: 'line',
+            yMin: 60,
+            yMax: 60,
+            borderColor: 'rgba(53, 162, 235, 0.2)',
+            borderWidth: 1,
+            borderDash: [4, 4],
+            label: {
+              display: false
+            }
+          }
+        }
       }
     },
     scales: {
