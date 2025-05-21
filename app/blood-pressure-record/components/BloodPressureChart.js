@@ -42,13 +42,9 @@ export default function BloodPressureChart({ data, selectedDay }) {
     if (!data) return;
     
     // Sort data by date and get last 7 days
-    console.log('Raw data:', data);
-    
     const sortedData = data
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .slice(-7);
-    
-    console.log('Sorted and filtered data:', sortedData);
     
     // Separate morning and evening data based on time
     const morningData = sortedData.filter(record => {
@@ -67,6 +63,20 @@ export default function BloodPressureChart({ data, selectedDay }) {
 
     // Create consistent labels for all dates
     const consistentLabels = allDates.flatMap(date => [`${date} Morning`, `${date} Evening`]);
+
+    // Helper function to check if a datapoint is selected
+    const isSelected = (date) => {
+      if (!selectedDay) return false;
+      return new Date(date).toLocaleDateString() === new Date(selectedDay).toLocaleDateString();
+    };
+
+    // Helper function to create background colors with selected state
+    const getBackgroundColors = (normalColor, selectedColor) => {
+      return allDates.flatMap(date => [
+        isSelected(date) ? selectedColor : normalColor,
+        isSelected(date) ? selectedColor : normalColor
+      ]);
+    };
     
     setChartData({
       labels: consistentLabels,
@@ -83,7 +93,10 @@ export default function BloodPressureChart({ data, selectedDay }) {
             );
             return [morningRecord?.diastolic || null, eveningRecord?.diastolic || null];
           }),
-          backgroundColor: [chartConfig.colors.diastolic.morning, chartConfig.colors.diastolic.evening],
+          backgroundColor: getBackgroundColors(
+            chartConfig.colors.diastolic.morning, 
+            'rgba(53, 162, 235, 0.95)'
+          ),
           borderColor: [chartConfig.colors.diastolic.borderMorning, chartConfig.colors.diastolic.borderEvening],
           borderWidth: [0, 2],
           stack: 'stack1',
@@ -105,7 +118,10 @@ export default function BloodPressureChart({ data, selectedDay }) {
               eveningRecord.systolic - eveningRecord.diastolic : null;
             return [morningDiff, eveningDiff];
           }),
-          backgroundColor: [chartConfig.colors.systolic.morning, chartConfig.colors.systolic.evening],
+          backgroundColor: getBackgroundColors(
+            chartConfig.colors.systolic.morning, 
+            'rgba(255, 99, 132, 0.95)'
+          ),
           borderColor: [chartConfig.colors.systolic.borderMorning, chartConfig.colors.systolic.borderEvening],
           borderWidth: [0, 2],
           stack: 'stack1',
@@ -132,12 +148,22 @@ export default function BloodPressureChart({ data, selectedDay }) {
           order: 1,
           yAxisID: 'y1',
           segment: {
+            borderColor: context => context.p0DataIndex % 2 === 1 ? 'rgba(255, 0, 0, 0.5)' : 'rgb(255, 0, 0)',
             borderDash: context => context.p0DataIndex % 2 === 1 ? [5, 5] : [],
+          },
+          pointStyle: (context) => {
+            const date = allDates[Math.floor(context.dataIndex / 2)];
+            return isSelected(date) ? 'rectRot' : 'circle';
+          },
+          pointRadius: (context) => {
+            const date = allDates[Math.floor(context.dataIndex / 2)];
+            return isSelected(date) ? 6 : 3;
           },
         },
       ],
     });
   }, [data, selectedDay]);
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
