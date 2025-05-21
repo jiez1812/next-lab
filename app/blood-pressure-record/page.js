@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import BloodPressureChart from './components/BloodPressureChart';
 import BloodPressureTable from './components/BloodPressureTable';
+import PasswordProtection from './components/PasswordProtection';
 
 export default function BloodPressurePage() {
+  const [isUnlocked, setIsUnlocked] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -24,6 +26,14 @@ export default function BloodPressurePage() {
 
     fetchData();
   }, []);
+  if (!isUnlocked) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-3xl font-bold mb-6">Blood Pressure Records</h1>
+        <PasswordProtection onUnlock={setIsUnlocked} isUnlocked={isUnlocked} />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
