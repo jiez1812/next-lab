@@ -1,4 +1,4 @@
-import { getBloodPressureRecords } from '../services/notion';
+import { getBloodPressureRecords } from '../../services/notion.js';
 
 export async function GET() {
   try {
