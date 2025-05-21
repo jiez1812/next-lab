@@ -11,10 +11,12 @@ import {
   Tooltip,
   Legend,
   PointElement,
+  SubTitle
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 // Import pattern fill plugin
 import 'chartjs-plugin-datalabels';
+import annotationPlugin from 'chartjs-plugin-annotation';
 
 ChartJS.register(
   CategoryScale,
@@ -24,7 +26,9 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  PointElement
+  PointElement,
+  SubTitle,
+  annotationPlugin
 );
 
 export default function BloodPressureChart() {
@@ -73,7 +77,9 @@ export default function BloodPressureChart() {
 
         setChartData({
           labels: consistentLabels,
-          datasets: [            {              type: 'bar',
+          datasets: [
+            {
+              type: 'bar',
               label: 'Systolic',
               data: allDates.flatMap(date => {
                 const morningRecord = morningData.find(record => 
@@ -84,10 +90,10 @@ export default function BloodPressureChart() {
                 );
                 return [morningRecord?.systolic || null, eveningRecord?.systolic || null];
               }),
-              backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 0.8)'],
-              borderColor: ['transparent', 'rgba(255, 99, 132, 1)'],
+              backgroundColor: ['rgba(53, 162, 235, 0.5)', 'rgba(53, 162, 235, 0.8)'],
+              borderColor: ['transparent', 'rgba(53, 162, 235, 1)'],
               borderWidth: [0, 2],
-              stack: true,
+              stack: 'stack1',
               order: 2,
             },
             {
@@ -100,17 +106,14 @@ export default function BloodPressureChart() {
                 const eveningRecord = eveningData.find(record => 
                   new Date(record.date).toLocaleDateString() === date
                 );
-                // Calculate the difference between diastolic and systolic
-                const morningBase = morningRecord?.systolic || 0;
-                const eveningBase = eveningRecord?.systolic || 0;
-                const morningValue = morningRecord?.diastolic ? morningRecord.diastolic - morningBase : null;
-                const eveningValue = eveningRecord?.diastolic ? eveningRecord.diastolic - eveningBase : null;
-                return [morningValue, eveningValue];
+                const morningDiastolic = morningRecord?.diastolic ? morningRecord.diastolic - morningRecord.systolic : null;
+                const eveningDiastolic = eveningRecord?.diastolic ? eveningRecord.diastolic - eveningRecord.systolic : null;
+                return [morningDiastolic, eveningDiastolic];
               }),
-              backgroundColor: ['rgba(53, 162, 235, 0.5)', 'rgba(53, 162, 235, 0.8)'],
-              borderColor: ['transparent', 'rgba(53, 162, 235, 1)'],
+              backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 0.8)'],
+              borderColor: ['transparent', 'rgba(255, 99, 132, 1)'],
               borderWidth: [0, 2],
-              stack: true,
+              stack: 'stack1',
               order: 2,
             },
             {
@@ -154,9 +157,31 @@ export default function BloodPressureChart() {
       mode: 'index',
       intersect: false,
     },
-    plugins: {      title: {
+    plugins: {
+      title: {
         display: true,
         text: 'Blood Pressure & Heart Rate Last 7 Days (Morning vs Evening)',
+        padding: {
+          bottom: 30
+        }
+      },
+      subtitle: {
+        display: true,
+        text: [
+          'Standard Range:',
+          'Systolic: 90-120 mmHg',
+          'Diastolic: 60-80 mmHg'
+        ],
+        position: 'bottom',
+        align: 'start',
+        color: 'rgb(102, 102, 102)',
+        font: {
+          size: 12,
+          family: 'system-ui'
+        },
+        padding: {
+          bottom: 10
+        }
       },
       legend: {
         position: 'top',
@@ -170,8 +195,9 @@ export default function BloodPressureChart() {
             return tooltipItems[0].label;
           },
         },
-      },
-    },    scales: {
+      }
+    },
+    scales: {
       y: {
         beginAtZero: true,
         min: 40,

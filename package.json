@@ -16,6 +16,7 @@
     "@types/react-datepicker": "^7.0.0",
     "@vercel/postgres": "^0.10.0",
     "chart.js": "^4.4.9",
+    "chartjs-plugin-annotation": "^3.1.0",
     "chartjs-plugin-datalabels": "^2.2.0",
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.5.1",
