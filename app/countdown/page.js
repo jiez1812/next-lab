@@ -27,13 +27,13 @@ export default async function CountdownPage() {
   });
 
   return (
-    <div className='flex flex-col items-center min-h-screen'>
-      <div className='order-2 mb-6 lg:order-1 lg:mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+    <div className='relative flex flex-col items-center min-h-screen'>
+      <div className='relative z-10 order-2 mb-6 lg:order-1 lg:mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {dateOptionsWithShortDate.map(dateDay => (
           <OptionCard key={dateDay.festivalName} dateDay={dateDay}/>
         ))}
       </div>
-      <div className='order-1 lg:order-2 flex-grow flex items-center m-6 lg:justify-center'>
+      <div className='relative z-20 order-1 lg:order-2 flex-grow flex items-center m-6 lg:justify-center'>
         <CustomCard/>
       </div>
     </div>
