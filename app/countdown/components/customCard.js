@@ -3,20 +3,34 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Datepicker from "react-tailwindcss-datepicker";
 import GlowLayer from './GlowLayer'
+import TimePicker from './TimePicker'
 
 export default function CustomCard() {
     const [eventName, setEventName] = useState('');
     const [eventDate, setEventDate] = useState({startDate:null, endDate:null});
     const [error, setError] = useState('');
     const [showTime, setShowTime] = useState(false);
+    const [time, setTime] = useState({ hour: 12, minute: '00', ampm: 'AM' });
     const router = useRouter();
 
     const handleClicked = () => {
         if (!eventName || !eventDate.startDate) {
             setError('Please fill in both fields');
         } else {
-            const targetDate = eventDate.startDate.toISOString().split('T')[0];
-            router.push(`/countdown/custom/${eventName}&${targetDate}`);
+            // build datetime with selected or default time
+            const date = new Date(eventDate.startDate);
+            if (showTime) {
+                // convert 12h to 24h
+                const hour24 = (time.hour % 12) + (time.ampm === 'PM' ? 12 : 0);
+                date.setHours(hour24, parseInt(time.minute), 0, 0);
+            } else {
+                date.setHours(0, 0, 0, 0);
+            }
+            const iso = date.toISOString();
+            // encode components for URL
+            const nameEnc = encodeURIComponent(eventName);
+            const dateEnc = encodeURIComponent(iso);
+            router.push(`/countdown/custom/${nameEnc}&${dateEnc}`);
         }
     }
 
@@ -46,7 +60,6 @@ export default function CustomCard() {
                                 primaryColor={"indigo"}
                                 inputClassName={`input input-bordered w-full ${error ? 'border-error' : ''}`}
                                 asSingle={true}
-                                asTimePicker={showTime}
                                 value={eventDate}
                                 useRange={false}
                                 onChange={newValue => setEventDate(newValue)}
@@ -63,6 +76,9 @@ export default function CustomCard() {
                                 />
                             </label>
                         </div>
+                        {showTime && (
+                            <TimePicker value={time} onChange={setTime} />
+                        )}
                         {error && <span className="text-error text-xs">{error}</span>}
                         <button
                             className="btn btn-primary"
