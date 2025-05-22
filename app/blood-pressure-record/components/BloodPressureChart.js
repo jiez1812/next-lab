@@ -211,6 +211,7 @@ export default function BloodPressureChart({ data, selectedDay }) {
             const date = allDates[Math.floor(context.dataIndex / 2)];
             return isSelected(date) ? 6 : 3;
           },
+          datalabels: { display: false },
         },
       ],
     });
