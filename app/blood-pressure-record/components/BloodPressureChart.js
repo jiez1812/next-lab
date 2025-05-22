@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,8 +16,8 @@ import {
   LineController
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
-// Import pattern fill plugin
-import 'chartjs-plugin-datalabels';
+// Import plugins
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { chartConfig } from '../config/chartConfig';
 
@@ -34,6 +34,7 @@ ChartJS.register(
   Legend,
   PointElement,
   SubTitle,
+  ChartDataLabels, // 正确注册 datalabels 插件
   annotationPlugin
 );
 
@@ -43,6 +44,21 @@ export default function BloodPressureChart({ data, selectedDay }) {
     datasets: [],
   });
   const [isMobile, setIsMobile] = useState(false);
+  // 添加图表实例引用
+  const chartRef = useRef(null);
+  
+  // 添加函数重新计算和应用注释
+  const updateAnnotations = useCallback(() => {
+    if (chartRef.current) {
+      const chart = chartRef.current;
+      // 手动触发图表更新以重绘标准阴影区域
+      setTimeout(() => {
+        if (chart) {
+          chart.update();
+        }
+      }, 50);
+    }
+  }, []);
 
   // Add window resize listener
   useEffect(() => {
@@ -55,12 +71,28 @@ export default function BloodPressureChart({ data, selectedDay }) {
     
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   useEffect(() => {
-    if (!data) return;
+    // 数据验证检查
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      // 设置空数据
+      setChartData({
+        labels: [],
+        datasets: []
+      });
+      return;
+    }
+    
+    // 确保所有记录都有必要的属性
+    const validData = data.filter(record => 
+      record && 
+      record.date && 
+      (record.diastolic !== undefined || record.systolic !== undefined || record.heartRate !== undefined)
+    );
+    
+    if (validData.length === 0) return;
     
     // Sort data by date and get last 7 days
-    const sortedData = data
+    const sortedData = validData
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .slice(-7);
     
@@ -117,6 +149,7 @@ export default function BloodPressureChart({ data, selectedDay }) {
           ),
           borderColor: [chartConfig.colors.diastolic.borderMorning, chartConfig.colors.diastolic.borderEvening],
           borderWidth: [0, 2],
+          datalabels: { display: false },
           stack: 'stack1',
           order: 2,
         },
@@ -142,6 +175,7 @@ export default function BloodPressureChart({ data, selectedDay }) {
           ),
           borderColor: [chartConfig.colors.systolic.borderMorning, chartConfig.colors.systolic.borderEvening],
           borderWidth: [0, 2],
+          datalabels: { display: false },
           stack: 'stack1',
           order: 2,
         },
@@ -181,6 +215,31 @@ export default function BloodPressureChart({ data, selectedDay }) {
       ],
     });
   }, [data, selectedDay]);
+  // 使用 state 来跟踪屏幕方向
+  const [isLandscape, setIsLandscape] = useState(false);
+    // 监听屏幕方向变化
+  useEffect(() => {
+    const handleOrientationChange = () => {
+      const wasLandscape = isLandscape;
+      const newIsLandscape = window.innerWidth > window.innerHeight;
+      setIsLandscape(newIsLandscape);
+      
+      // 如果方向确实发生了变化，更新注释
+      if (wasLandscape !== newIsLandscape) {
+        // 给浏览器一点时间完成布局变化
+        setTimeout(updateAnnotations, 200);
+      }
+    };
+    
+    handleOrientationChange(); // 检查初始方向
+    window.addEventListener('resize', handleOrientationChange);
+    window.addEventListener('orientationchange', handleOrientationChange);
+    
+    return () => {
+      window.removeEventListener('resize', handleOrientationChange);
+      window.removeEventListener('orientationchange', handleOrientationChange);
+    };
+  }, [isLandscape, updateAnnotations]);
 
   const options = {
     responsive: true,
@@ -190,6 +249,10 @@ export default function BloodPressureChart({ data, selectedDay }) {
       intersect: false,
     },
     plugins: {
+      // hide datalabels on bar columns but enable on other types
+      datalabels: {
+        display: context => context.dataset.type !== 'bar',
+      },
       title: {
         display: true,
         text: chartConfig.chartTitle.main,
@@ -243,70 +306,22 @@ export default function BloodPressureChart({ data, selectedDay }) {
         annotations: {
           systolicArea: {
             type: 'box',
+            yScaleID: 'y',
             yMin: chartConfig.standardRanges.systolic.min,
             yMax: chartConfig.standardRanges.systolic.max,
             backgroundColor: chartConfig.standardRanges.systolic.backgroundColor,
-            borderColor: 'transparent',
-            drawTime: 'beforeDatasetsDraw',
+            borderWidth: 0
           },
           diastolicArea: {
             type: 'box',
+            yScaleID: 'y',
             yMin: chartConfig.standardRanges.diastolic.min,
             yMax: chartConfig.standardRanges.diastolic.max,
             backgroundColor: chartConfig.standardRanges.diastolic.backgroundColor,
-            borderColor: 'transparent',
-            drawTime: 'beforeDatasetsDraw',
-          },
-          systolicUpperLine: {
-            type: 'line',
-            yMin: chartConfig.standardRanges.systolic.max,
-            yMax: chartConfig.standardRanges.systolic.max,
-            borderColor: chartConfig.standardRanges.systolic.lineColor,
-            borderWidth: 1,
-            borderDash: [4, 4],
-            drawTime: 'beforeDatasetsDraw',
-            label: {
-              display: false
-            }
-          },
-          systolicLowerLine: {
-            type: 'line',
-            yMin: chartConfig.standardRanges.systolic.min,
-            yMax: chartConfig.standardRanges.systolic.min,
-            borderColor: chartConfig.standardRanges.systolic.lineColor,
-            borderWidth: 1,
-            borderDash: [4, 4],
-            drawTime: 'beforeDatasetsDraw',
-            label: {
-              display: false
-            }
-          },
-          diastolicUpperLine: {
-            type: 'line',
-            yMin: chartConfig.standardRanges.diastolic.max,
-            yMax: chartConfig.standardRanges.diastolic.max,
-            borderColor: chartConfig.standardRanges.diastolic.lineColor,
-            borderWidth: 1,
-            borderDash: [4, 4],
-            drawTime: 'beforeDatasetsDraw',
-            label: {
-              display: false
-            }
-          },
-          diastolicLowerLine: {
-            type: 'line',
-            yMin: chartConfig.standardRanges.diastolic.min,
-            yMax: chartConfig.standardRanges.diastolic.min,
-            borderColor: chartConfig.standardRanges.diastolic.lineColor,
-            borderWidth: 1,
-            borderDash: [4, 4],
-            drawTime: 'beforeDatasetsDraw',
-            label: {
-              display: false
-            }
+            borderWidth: 0
           }
         }
-      }
+      },
     },
     scales: {
       y: {
@@ -327,6 +342,8 @@ export default function BloodPressureChart({ data, selectedDay }) {
             size: isMobile ? 10 : 12
           }
         }
+        // 移除可能导致问题的 afterDataLimits 回调
+        // 使用固定的 min/max 值更稳定
       },
       y1: {
         beginAtZero: true,
@@ -357,11 +374,25 @@ export default function BloodPressureChart({ data, selectedDay }) {
         }
       }
     },
-  };
+  };  // 添加一个安全检查，确保chartData和options都已准备好
+  const isDataReady = chartData?.labels?.length > 0 && chartData?.datasets?.length > 0;
+
   return (
-    <div className={`w-full ${isMobile ? 'h-[400px]' : 'h-[500px]'} p-4 bg-base-100 rounded-lg shadow-lg`}>
-      {typeof window !== 'undefined' && (
-        <Chart type="bar" data={chartData} options={options} />
+    <div className={`w-full ${isMobile ? (isLandscape ? 'h-[300px]' : 'h-[400px]') : 'h-[500px]'} p-4 bg-base-100 rounded-lg shadow-lg`}>
+      {typeof window !== 'undefined' && isDataReady && (
+        <Chart 
+          type="bar" 
+          data={chartData} 
+          options={options} 
+          // 使用key更新组件强制完全重新渲染当屏幕方向改变时
+          key={`chart-${isMobile}-${isLandscape}-${data?.length || 0}-${selectedDay || 'none'}`}
+          ref={chartRef} // 设置图表引用
+        />
+      )}
+      {!isDataReady && (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-500">准备图表数据中...</p>
+        </div>
       )}
     </div>
   );
