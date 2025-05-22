@@ -35,45 +35,85 @@ export default function CountdownTimer({ targetDate }) {
         return time < 10 ? `0${time}` : time;
     };
 
-    // Checks if target calendar date is same as today
+    // Only treat as "today" if no custom time (midnight) and date matches
+    const isDefaultMidnightToday = () => {
+        const now = moment().tz(moment.tz.guess());
+        const target = moment.tz(targetDate, moment.tz.guess());
+        const sameDay = now.isSame(target, 'day');
+        const isMidnight = target.hour() === 0 && target.minute() === 0;
+        return sameDay && isMidnight;
+    };
+
     const isSameCalendarDay = () => {
         const now = moment().tz(moment.tz.guess());
         const target = moment.tz(targetDate, moment.tz.guess());
         return now.isSame(target, 'day');
     };
-    
+
     return (
         <div className="relative">
-            {isSameCalendarDay() ? (
-                <p className="text-xl">It is today!</p>
-            ) : Object.keys(timeLeft).length === 0 ? (
-                <p className="text-xl">The date is past...🤦‍♂️🤦‍♀️</p>
-            ) : (
-                <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
-                    {timeLeft.days > 0 && (
-                        <>
-                            <span className="text-6xl text-right text-primary">{formatTime(timeLeft.days)}</span>
-                            <span className="text-xl">days</span>
-                        </>
-                    )}
-                    {(timeLeft.days > 0 || timeLeft.hours > 0) && (
-                        <>
-                            <span className="text-6xl text-right text-primary">{formatTime(timeLeft.hours)}</span>
-                            <span className="text-xl">hours</span>
-                        </>
-                    )}
-                    {(timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0) && (
-                        <>
-                            <span className="text-6xl text-right text-primary">{formatTime(timeLeft.minutes)}</span>
-                            <span className="text-xl">minutes</span>
-                        </>
-                    )}
-                    <>
-                        <span className="text-6xl text-right text-primary">{formatTime(timeLeft.seconds)}</span>
-                        <span className="text-xl">seconds</span>
-                    </>
-                </div>
-            )}
+            {(() => {
+                const sameDay = isSameCalendarDay();
+                const isPast = Object.keys(timeLeft).length === 0;
+                if (sameDay) {
+                    return isPast
+                        ? <p className="text-xl">It is today!</p>
+                        : (
+                            <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
+                                {timeLeft.days > 0 && (
+                                    <>
+                                        <span className="text-6xl text-right text-primary">{formatTime(timeLeft.days)}</span>
+                                        <span className="text-xl">days</span>
+                                    </>
+                                )}
+                                {(timeLeft.days > 0 || timeLeft.hours > 0) && (
+                                    <>
+                                        <span className="text-6xl text-right text-primary">{formatTime(timeLeft.hours)}</span>
+                                        <span className="text-xl">hours</span>
+                                    </>
+                                )}
+                                {(timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0) && (
+                                    <>
+                                        <span className="text-6xl text-right text-primary">{formatTime(timeLeft.minutes)}</span>
+                                        <span className="text-xl">minutes</span>
+                                    </>
+                                )}
+                                <>
+                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.seconds)}</span>
+                                    <span className="text-xl">seconds</span>
+                                </>
+                            </div>
+                        );
+                }
+                return isPast
+                    ? <p className="text-xl">The date is past...🤦‍♂️🤦‍♀️</p>
+                    : (
+                        <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
+                            {timeLeft.days > 0 && (
+                                <>
+                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.days)}</span>
+                                    <span className="text-xl">days</span>
+                                </>
+                            )}
+                            {(timeLeft.days > 0 || timeLeft.hours > 0) && (
+                                <>
+                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.hours)}</span>
+                                    <span className="text-xl">hours</span>
+                                </>
+                            )}
+                            {(timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0) && (
+                                <>
+                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.minutes)}</span>
+                                    <span className="text-xl">minutes</span>
+                                </>
+                            )}
+                            <>
+                                <span className="text-6xl text-right text-primary">{formatTime(timeLeft.seconds)}</span>
+                                <span className="text-xl">seconds</span>
+                            </>
+                        </div>
+                    );
+            })()}
         </div>
     );
 }
