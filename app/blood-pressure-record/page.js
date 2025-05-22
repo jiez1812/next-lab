@@ -10,11 +10,17 @@ export default function BloodPressurePage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/blood-pressure-record/api/notion');
+        // Add cache-busting timestamp and no-cache headers
+        const response = await fetch(`/blood-pressure-record/api/notion?t=${new Date().getTime()}`, {
+          cache: 'no-store',
+          headers: {
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache'
+          }
+        });
         const { data } = await response.json();
         setData(data);
         setLoading(false);
