@@ -35,7 +35,7 @@ export default function BloodPressurePage() {
   if (!isUnlocked) {
     return (
       <div className="container mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-6">Blood Pressure Records</h1>
+        <h1 className="text-3xl font-bold mb-6">Blood Pressure Record</h1>
         <PasswordProtection onUnlock={setIsUnlocked} isUnlocked={isUnlocked} />
       </div>
     );
@@ -44,7 +44,7 @@ export default function BloodPressurePage() {
   if (loading) {
     return (
       <div className="container mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-6">Blood Pressure Records</h1>
+        <h1 className="text-3xl font-bold mb-6">Blood Pressure Record</h1>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
@@ -54,7 +54,7 @@ export default function BloodPressurePage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">Blood Pressure Records</h1>
+      <h1 className="text-3xl font-bold mb-6">Blood Pressure Record</h1>
       
       <div className="grid grid-cols-1 gap-6">
         <BloodPressureChart data={data} selectedDay={selectedDay} />
