@@ -35,19 +35,18 @@ export default function CountdownTimer({ targetDate }) {
         return time < 10 ? `0${time}` : time;
     };
 
-    const isToday = () => {
-        const today = new Date();
-        const target = new Date(targetDate);
-        return (
-            today.getDate() === target.getDate() &&
-            today.getMonth() === target.getMonth() &&
-            today.getFullYear() === target.getFullYear()
-        );
+    // Only treat as "today" if no custom time (midnight) and date matches
+    const isDefaultMidnightToday = () => {
+        const now = moment().tz(moment.tz.guess());
+        const target = moment.tz(targetDate, moment.tz.guess());
+        const sameDay = now.isSame(target, 'day');
+        const isMidnight = target.hour() === 0 && target.minute() === 0;
+        return sameDay && isMidnight;
     };
     
     return (
         <div className="relative">
-            {isToday() ? (
+            {isDefaultMidnightToday() ? (
                 <p className="text-xl">It is today!</p>
             ) : Object.keys(timeLeft).length === 0 ? (
                 <p className="text-xl">The date is past...🤦‍♂️🤦‍♀️</p>
