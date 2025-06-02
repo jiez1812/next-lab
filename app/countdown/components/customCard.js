@@ -104,8 +104,8 @@ export default function CustomCard() {
                                             className="w-12 h-12 rounded-lg border border-base-300 cursor-pointer"
                                         />
                                         <div className="flex flex-col">
-                                            <span className="text-xs text-base-content/70">Current: {primaryColor}</span>
-                                            <span className="text-xs text-base-content/70">Display: {displayColor}</span>
+                                            <span className="text-xs text-base-content/70">Current Color</span>
+                                            <span className="text-xs text-base-content/70">{primaryColor}</span>
                                         </div>
                                     </div>
                                 </div>
