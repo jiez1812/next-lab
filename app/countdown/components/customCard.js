@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Datepicker from "react-tailwindcss-datepicker";
 import GlowLayer from './GlowLayer'
 import TimePicker from './TimePicker'
+import ColorResetButton from './ColorResetButton'
 import { useColor } from '../context/ColorContext';
 
 export default function CustomCard() {
@@ -12,9 +13,12 @@ export default function CustomCard() {
     const [error, setError] = useState('');
     const [showTime, setShowTime] = useState(false);
     const [time, setTime] = useState({ hour: 12, minute: '00', ampm: 'AM' });
-    
-    const { primaryColor, setPrimaryColor, displayColor, fontColor } = useColor();
+      const { primaryColor, setPrimaryColor, displayColor, fontColor } = useColor();
     const router = useRouter();
+
+    const handleResetColor = () => {
+        setPrimaryColor('#6366f1'); // Reset to default indigo color
+    };
 
     const handleClicked = () => {
         if (!eventName || !eventDate.startDate) {
@@ -91,20 +95,25 @@ export default function CustomCard() {
                                     style={{ backgroundColor: displayColor }}
                                 ></div>
                             </div>
-                            <div className="collapse-content">
-                                <div className="form-control">
+                            <div className="collapse-content">                                <div className="form-control">
                                     <label className="label">
                                         <span className="label-text">Primary Color</span>
                                     </label>
                                     <div className="flex items-center gap-3">
-                                        <input 
-                                            type="color" 
-                                            value={primaryColor} 
-                                            onChange={e => setPrimaryColor(e.target.value)}
-                                            className="w-12 h-12 rounded-lg border border-base-300 cursor-pointer"
-                                        />
+                                        <div className="flex items-center gap-2">
+                                            <input 
+                                                type="color" 
+                                                value={primaryColor} 
+                                                onChange={e => setPrimaryColor(e.target.value)}
+                                                className="w-12 h-12 rounded-lg border border-base-300 cursor-pointer"
+                                            />
+                                            <ColorResetButton 
+                                                onReset={handleResetColor} 
+                                                color={displayColor}
+                                            />
+                                        </div>
                                         <div className="flex flex-col">
-                                            <span className="text-xs text-base-content/70">Current Color</span>
+                                            <span className="text-xs text-base-content/70">Current Color:</span>
                                             <span className="text-xs text-base-content/70">{primaryColor}</span>
                                         </div>
                                     </div>
