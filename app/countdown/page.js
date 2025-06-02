@@ -1,30 +1,42 @@
+'use client'
 import OptionCard from './components/optionCard';
-import { sql } from "@vercel/postgres";
-import moment from 'moment-timezone';
 import CustomCard from './components/customCard';
+import { useState, useEffect } from 'react';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CountdownPage() {
-  let result;
-  try {
-    result = await sql`SELECT * FROM public."Festival" WHERE "festivalDate" > timezone('Asia/Singapore', NOW()) ORDER BY "festivalDate" ASC LIMIT 6;`;
-  } catch (error) {
-    console.error('Error executing SQL query:', error);
-    result = { rows: [] }; // Fallback to an empty array if there's an error
+export default function CountdownPage() {
+  const [dateOptionsWithShortDate, setDateOptionsWithShortDate] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // 调用API路由来获取数据，而不是直接使用sql
+        const response = await fetch('/api/festivals');
+        if (!response.ok) {
+          throw new Error('Failed to fetch festivals');
+        }
+        const data = await response.json();
+        setDateOptionsWithShortDate(data);
+      } catch (error) {
+        console.error('Error fetching festivals:', error);
+        setDateOptionsWithShortDate([]); // Fallback to an empty array if there's an error
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen'>
+        <div className="loading loading-spinner loading-lg"></div>
+      </div>
+    );
   }
-
-  const dateOptions = result.rows;
-
-  const dateOptionsWithShortDate = dateOptions.map(option => {
-    // Ensure the date is interpreted in the correct timezone
-    const festivalDate = moment.tz(option.festivalDate, 'Asia/Singapore');
-    const shortDate = festivalDate.format('DD MMM YYYY');
-    return {
-      ...option,
-      festivalDate: shortDate
-    };
-  });
 
   return (
     <div className='relative flex flex-col items-center min-h-screen'>

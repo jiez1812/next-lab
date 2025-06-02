@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Datepicker from "react-tailwindcss-datepicker";
 import GlowLayer from './GlowLayer'
 import TimePicker from './TimePicker'
+import { useColor } from '../context/ColorContext';
 
 export default function CustomCard() {
     const [eventName, setEventName] = useState('');
@@ -11,22 +12,8 @@ export default function CustomCard() {
     const [error, setError] = useState('');
     const [showTime, setShowTime] = useState(false);
     const [time, setTime] = useState({ hour: 12, minute: '00', ampm: 'AM' });
-    const [primaryColor, setPrimaryColor] = useState('#8b5cf6');
-    // Helper to compute brightness and clamp very light colors
-    const getBrightness = (hex) => {
-        const h = hex.replace('#', '');
-        const bigint = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
-        const r = (bigint >> 16) & 255;
-        const g = (bigint >> 8) & 255;
-        const b = bigint & 255;
-        return (r * 299 + g * 587 + b * 114) / 1000;
-    };
-    const brightness = getBrightness(primaryColor);
-    const isLight = brightness > 128;
-    const isTooLight = brightness > 245;
-    // If color is too light (near white), use a default gray to ensure visibility
-    const displayColor = isTooLight ? '#888888' : primaryColor;
-    const fontColor = isLight ? '#000000' : '#ffffff';
+    
+    const { primaryColor, setPrimaryColor, displayColor, fontColor } = useColor();
     const router = useRouter();
 
     const handleClicked = () => {
@@ -95,16 +82,32 @@ export default function CustomCard() {
                         </div>
                         {showTime && (
                             <TimePicker value={time} onChange={setTime} />
-                        )}
-                        <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                        )}                        <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
                             <input type="checkbox" />
-                            <div className="collapse-title">Customize</div>
+                            <div className="collapse-title">
+                                Customize 
+                                <div 
+                                    className="inline-block w-4 h-4 rounded-full ml-2 border border-base-300"
+                                    style={{ backgroundColor: displayColor }}
+                                ></div>
+                            </div>
                             <div className="collapse-content">
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text">Primary Color</span>
                                     </label>
-                                    <input type="color" value={primaryColor} onChange={e => setPrimaryColor(e.target.value)} />
+                                    <div className="flex items-center gap-3">
+                                        <input 
+                                            type="color" 
+                                            value={primaryColor} 
+                                            onChange={e => setPrimaryColor(e.target.value)}
+                                            className="w-12 h-12 rounded-lg border border-base-300 cursor-pointer"
+                                        />
+                                        <div className="flex flex-col">
+                                            <span className="text-xs text-base-content/70">Current: {primaryColor}</span>
+                                            <span className="text-xs text-base-content/70">Display: {displayColor}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
