@@ -11,6 +11,22 @@ export default function CustomCard() {
     const [error, setError] = useState('');
     const [showTime, setShowTime] = useState(false);
     const [time, setTime] = useState({ hour: 12, minute: '00', ampm: 'AM' });
+    const [primaryColor, setPrimaryColor] = useState('#8b5cf6');
+    // Helper to compute brightness and clamp very light colors
+    const getBrightness = (hex) => {
+        const h = hex.replace('#', '');
+        const bigint = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return (r * 299 + g * 587 + b * 114) / 1000;
+    };
+    const brightness = getBrightness(primaryColor);
+    const isLight = brightness > 128;
+    const isTooLight = brightness > 245;
+    // If color is too light (near white), use a default gray to ensure visibility
+    const displayColor = isTooLight ? '#888888' : primaryColor;
+    const fontColor = isLight ? '#000000' : '#ffffff';
     const router = useRouter();
 
     const handleClicked = () => {
@@ -30,7 +46,8 @@ export default function CustomCard() {
             // encode components for URL
             const nameEnc = encodeURIComponent(eventName);
             const dateEnc = encodeURIComponent(iso);
-            router.push(`/countdown/custom/${nameEnc}&${dateEnc}`);
+            const colorEnc = encodeURIComponent(primaryColor);
+            router.push(`/countdown/custom/${nameEnc}&${dateEnc}&${colorEnc}`);
         }
     }
 
@@ -40,10 +57,10 @@ export default function CustomCard() {
 
     return (
         <div className="relative w-80">
-            <GlowLayer />
+            <GlowLayer color={displayColor} />
             <div className="card relative z-10 w-80">
                 <div className="card-body bg-base-100 rounded-2xl">
-                    <h2 className="card-title text-2xl justify-center text-primary">
+                    <h2 className="card-title text-2xl justify-center" style={{ color: displayColor }}>
                         Custom Event
                     </h2>
                     <div className='form-control gap-3'>
@@ -79,9 +96,22 @@ export default function CustomCard() {
                         {showTime && (
                             <TimePicker value={time} onChange={setTime} />
                         )}
+                        <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                            <input type="checkbox" />
+                            <div className="collapse-title">Customize</div>
+                            <div className="collapse-content">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Primary Color</span>
+                                    </label>
+                                    <input type="color" value={primaryColor} onChange={e => setPrimaryColor(e.target.value)} />
+                                </div>
+                            </div>
+                        </div>
                         {error && <span className="text-error text-xs">{error}</span>}
                         <button
-                            className="btn btn-primary"
+                            className="btn"
+                            style={{ backgroundColor: displayColor, borderColor: displayColor, color: fontColor }}
                             onClick={handleClicked}
                         >
                             Create Countdown

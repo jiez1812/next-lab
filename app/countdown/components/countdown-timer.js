@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import moment from 'moment-timezone';
 
-export default function CountdownTimer({ targetDate }) {
+export default function CountdownTimer({ targetDate, primaryColor = '#8b5cf6' }) {
     const calculateTimeLeft = () => {
         const now = moment().tz(moment.tz.guess());
         const target = moment.tz(targetDate, moment.tz.guess());
@@ -62,24 +62,24 @@ export default function CountdownTimer({ targetDate }) {
                             <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
                                 {timeLeft.days > 0 && (
                                     <>
-                                        <span className="text-6xl text-right text-primary">{formatTime(timeLeft.days)}</span>
+                                        <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.days)}</span>
                                         <span className="text-xl">days</span>
                                     </>
                                 )}
                                 {(timeLeft.days > 0 || timeLeft.hours > 0) && (
                                     <>
-                                        <span className="text-6xl text-right text-primary">{formatTime(timeLeft.hours)}</span>
+                                        <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.hours)}</span>
                                         <span className="text-xl">hours</span>
                                     </>
                                 )}
                                 {(timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0) && (
                                     <>
-                                        <span className="text-6xl text-right text-primary">{formatTime(timeLeft.minutes)}</span>
+                                        <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.minutes)}</span>
                                         <span className="text-xl">minutes</span>
                                     </>
                                 )}
                                 <>
-                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.seconds)}</span>
+                                    <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.seconds)}</span>
                                     <span className="text-xl">seconds</span>
                                 </>
                             </div>
@@ -91,24 +91,24 @@ export default function CountdownTimer({ targetDate }) {
                         <div className="grid grid-cols-2 gap-4 md:flex flex-row items-end">
                             {timeLeft.days > 0 && (
                                 <>
-                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.days)}</span>
+                                    <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.days)}</span>
                                     <span className="text-xl">days</span>
                                 </>
                             )}
                             {(timeLeft.days > 0 || timeLeft.hours > 0) && (
                                 <>
-                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.hours)}</span>
+                                    <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.hours)}</span>
                                     <span className="text-xl">hours</span>
                                 </>
                             )}
                             {(timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0) && (
                                 <>
-                                    <span className="text-6xl text-right text-primary">{formatTime(timeLeft.minutes)}</span>
+                                    <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.minutes)}</span>
                                     <span className="text-xl">minutes</span>
                                 </>
                             )}
                             <>
-                                <span className="text-6xl text-right text-primary">{formatTime(timeLeft.seconds)}</span>
+                                <span className="text-6xl text-right" style={{ color: primaryColor }}>{formatTime(timeLeft.seconds)}</span>
                                 <span className="text-xl">seconds</span>
                             </>
                         </div>
